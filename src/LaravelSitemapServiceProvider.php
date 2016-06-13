@@ -79,7 +79,9 @@ class LaravelSitemapServiceProvider extends ServiceProvider
     {
         return [
             'sitemap.manager',
+            Contracts\SitemapManager::class,
             'sitemap.styler',
+            Contracts\SitemapStyler::class,
         ];
     }
 
