@@ -49,10 +49,17 @@ class SitemapManagerTest extends TestCase
             $this->assertInstanceOf($expected, $this->sitemap);
         }
 
-        $this->assertInstanceOf(
-            \Arcanedev\LaravelSitemap\SitemapManager::class,
-            $this->app->make(\Arcanedev\LaravelSitemap\Contracts\SitemapManager::class)
-        );
+        $this->sitemap = $this->app->make(\Arcanedev\LaravelSitemap\Contracts\SitemapManager::class);
+
+        foreach ($expectations as $expected) {
+            $this->assertInstanceOf($expected, $this->sitemap);
+        }
+
+        $this->sitemap = sitemap();
+
+        foreach ($expectations as $expected) {
+            $this->assertInstanceOf($expected, $this->sitemap);
+        }
     }
 
     /** @test */

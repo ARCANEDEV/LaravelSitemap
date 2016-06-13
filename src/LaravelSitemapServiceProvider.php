@@ -19,14 +19,14 @@ class LaravelSitemapServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $package      = 'sitemap';
+    protected $package = 'sitemap';
 
     /**
      * Indicates if loading of the provider is deferred.
      *
      * @var bool
      */
-    protected $defer = true;
+    protected $defer   = true;
 
     /* ------------------------------------------------------------------------------------------------
      |  Getters & Setters
