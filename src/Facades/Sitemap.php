@@ -15,5 +15,5 @@ class Sitemap extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'sitemap'; }
+    protected static function getFacadeAccessor() { return 'sitemap.manager'; }
 }

@@ -53,6 +53,7 @@ class LaravelSitemapServiceProvider extends ServiceProvider
     {
         $this->registerConfig();
         $this->registerSitemapStyler();
+        $this->registerSitemapGenerator();
         $this->registerSitemapManager();
     }
 
@@ -82,6 +83,8 @@ class LaravelSitemapServiceProvider extends ServiceProvider
             Contracts\SitemapManager::class,
             'sitemap.styler',
             Contracts\SitemapStyler::class,
+            'sitemap.generator',
+            Contracts\SitemapGenerator::class,
         ];
     }
 
@@ -90,33 +93,47 @@ class LaravelSitemapServiceProvider extends ServiceProvider
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Register the sitemap manager.
-     */
-    private function registerSitemapManager()
-    {
-        $this->app->bind('sitemap.manager', function ($app) {
-            /**
-             * @var  \Illuminate\Contracts\Config\Repository            $config
-             * @var  \Illuminate\Cache\CacheManager                     $cache
-             * @var  \Illuminate\Filesystem\Filesystem                  $filesystem
-             * @var  \Arcanedev\LaravelSitemap\Contracts\SitemapStyler  $styler
-             */
-            $cache      = $app['cache'];
-            $config     = $app['config'];
-            $filesystem = $app['files'];
-            $styler     = $app['sitemap.styler'];
-
-            return new SitemapManager($cache->driver(), $config, $filesystem, $styler);
-        });
-        $this->bind(Contracts\SitemapManager::class, 'sitemap.manager');
-    }
-
-    /**
      * Register the sitemap styler.
      */
     private function registerSitemapStyler()
     {
         $this->app->bind('sitemap.styler', Helpers\SitemapStyler::class);
         $this->bind(Contracts\SitemapStyler::class, 'sitemap.styler');
+    }
+
+    /**
+     * Register the sitemap generator.
+     */
+    private function registerSitemapGenerator()
+    {
+        $this->app->bind('sitemap.generator', Helpers\SitemapGenerator::class);
+        $this->bind(Contracts\SitemapGenerator::class, 'sitemap.generator');
+    }
+
+    /**
+     * Register the sitemap manager.
+     */
+    private function registerSitemapManager()
+    {
+        $this->app->bind('sitemap.manager', function ($app) {
+            /**
+             * @var  \Illuminate\Contracts\Config\Repository               $config
+             * @var  \Illuminate\Cache\CacheManager                        $cache
+             * @var  \Illuminate\Filesystem\Filesystem                     $filesystem
+             * @var  \Arcanedev\LaravelSitemap\Contracts\SitemapGenerator  $generator
+             */
+            $cache      = $app['cache'];
+            $config     = $app['config'];
+            $filesystem = $app['files'];
+            $generator  = $app['sitemap.generator'];
+
+            return new SitemapManager(
+                $cache->driver(),
+                $config,
+                $filesystem,
+                $generator
+            );
+        });
+        $this->bind(Contracts\SitemapManager::class, 'sitemap.manager');
     }
 }
