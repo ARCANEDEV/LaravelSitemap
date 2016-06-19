@@ -174,7 +174,7 @@ class SitemapGeneratorTest extends TestCase
 
             $this->assertEquals($expectation['headers'], $generated['headers']);
             foreach ($expectation['content'] as $content) {
-                $this->assertContains($content, $generated['content']);
+                $this->assertContains($content, $generated['content'], 'Failed on '.$format);
             }
         }
     }
