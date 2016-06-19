@@ -13,7 +13,7 @@ class SitemapManagerTest extends TestCase
      | ------------------------------------------------------------------------------------------------
      */
     /** @var  \Arcanedev\LaravelSitemap\SitemapManager  */
-    protected $sitemap;
+    protected $manager;
 
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
@@ -23,12 +23,12 @@ class SitemapManagerTest extends TestCase
     {
         parent::setUp();
 
-        $this->sitemap = $this->app->make('sitemap.manager');
+        $this->manager = $this->app->make('sitemap.manager');
     }
 
     public function tearDown()
     {
-        unset($this->sitemap);
+        unset($this->manager);
 
         parent::tearDown();
     }
@@ -46,46 +46,72 @@ class SitemapManagerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->sitemap);
+            $this->assertInstanceOf($expected, $this->manager);
         }
 
-        $this->sitemap = $this->app->make(\Arcanedev\LaravelSitemap\Contracts\SitemapManager::class);
+        $this->manager = $this->app->make(\Arcanedev\LaravelSitemap\Contracts\SitemapManager::class);
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->sitemap);
+            $this->assertInstanceOf($expected, $this->manager);
         }
 
-        $this->sitemap = sitemap();
+        $this->manager = sitemap();
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->sitemap);
+            $this->assertInstanceOf($expected, $this->manager);
         }
     }
 
     /** @test */
     public function it_can_set_and_get_attributes()
     {
-        $this->sitemap->setLink('ARCANEDEV Link');
-        $this->sitemap->setTitle('ARCANEDEV Title');
-        $this->sitemap->setCacheEnabled(true);
-        $this->sitemap->setCacheKey('lv-sitemap');
-        $this->sitemap->setCacheDuration(72000);
-        $this->sitemap->setEscaping(false);
-        $this->sitemap->setUseLimitSize(true);
-        $this->sitemap->setMaxSize(10000);
-        $this->sitemap->setUseStyles(false);
-        $this->sitemap->setStyleLocation('https://static.foobar.tld/xsl-styles/');
+        $this->manager->setLink('ARCANEDEV Link');
+        $this->manager->setTitle('ARCANEDEV Title');
+        $this->manager->setCacheEnabled(true);
+        $this->manager->setCacheKey('lv-sitemap');
+        $this->manager->setCacheDuration(72000);
+        $this->manager->setEscaping(false);
+        $this->manager->setUseLimitSize(true);
+        $this->manager->setMaxSize(10000);
+        $this->manager->setStyleLocation('https://static.foobar.tld/xsl-styles/');
 
-        $this->assertEquals('ARCANEDEV Link', $this->sitemap->getLink());
-        $this->assertEquals('ARCANEDEV Title', $this->sitemap->getTitle());
-        $this->assertTrue($this->sitemap->isCacheEnabled());
-        $this->assertEquals('lv-sitemap', $this->sitemap->getCacheKey());
-        $this->assertEquals(72000, $this->sitemap->getCacheDuration());
-        $this->assertFalse($this->sitemap->isEscaped());
-        $this->assertTrue($this->sitemap->getUseLimitSize());
-        $this->assertEquals(10000, $this->sitemap->getMaxSize());
-        $this->assertFalse($this->sitemap->getUseStyles());
-        $this->assertEquals('https://static.foobar.tld/xsl-styles/', $this->sitemap->getStyleLocation());
+        $this->assertEquals('ARCANEDEV Link', $this->manager->getLink());
+        $this->assertEquals('ARCANEDEV Title', $this->manager->getTitle());
+        $this->assertTrue($this->manager->isCacheEnabled());
+        $this->assertEquals('lv-sitemap', $this->manager->getCacheKey());
+        $this->assertEquals(72000, $this->manager->getCacheDuration());
+        $this->assertFalse($this->manager->isEscaped());
+        $this->assertTrue($this->manager->getUseLimitSize());
+        $this->assertEquals(10000, $this->manager->getMaxSize());
+        $this->assertEquals('https://static.foobar.tld/xsl-styles/', $this->manager->getStyleLocation());
+    }
+
+    /** @test */
+    public function it_can_enable_and_disable_styles()
+    {
+        $this->assertTrue($this->manager->getUseStyles());
+
+        $this->manager->setUseStyles(false);
+
+        $this->assertFalse($this->manager->getUseStyles());
+
+        $this->manager->setUseStyles(true);
+
+        $this->assertTrue($this->manager->getUseStyles());
+    }
+
+    /** @test */
+    public function it_can_enable_and_disable_cache()
+    {
+        $this->assertFalse($this->manager->isCacheEnabled());
+
+        $this->manager->setCacheEnabled(true);
+
+        $this->assertTrue($this->manager->isCacheEnabled());
+
+        $this->manager->setCacheEnabled(false);
+
+        $this->assertFalse($this->manager->isCacheEnabled());
     }
 
     /** @test */
@@ -174,10 +200,10 @@ class SitemapManagerTest extends TestCase
         ];
 
         // add new sitemap items
-        $this->sitemap->add('TestLoc',  '2016-02-29 00:00:00', 0.95, 'weekly', $images, 'TestTitle', $translations, $videos, $googleNews, $alternates);
-        $this->sitemap->add('TestLoc2', '2016-03-01 00:00:00', 0.85, 'daily');
+        $this->manager->add('TestLoc',  '2016-02-29 00:00:00', 0.95, 'weekly', $images, 'TestTitle', $translations, $videos, $googleNews, $alternates);
+        $this->manager->add('TestLoc2', '2016-03-01 00:00:00', 0.85, 'daily');
 
-        $items     = $this->sitemap->getItems();
+        $items     = $this->manager->getItems();
         /** @var \Arcanedev\LaravelSitemap\Entities\SitemapItem $firstItem */
         $firstItem = $items->first();
 
@@ -220,14 +246,14 @@ class SitemapManagerTest extends TestCase
     public function it_can_add_items()
     {
         // add one item
-        $this->sitemap->addItem([
+        $this->manager->addItem([
             'loc'      => 'TestLoc',
             'lastmod'  => '2016-01-01 00:00:00',
             'priority' => 0.95,
             'freq'     => 'daily',
         ]);
 
-        $this->sitemap->addItems([
+        $this->manager->addItems([
             [
                 'loc'      => 'TestLoc2',
                 'lastmod'  => '2016-01-02 00:00:00',
@@ -241,7 +267,7 @@ class SitemapManagerTest extends TestCase
             ],
         ]);
 
-        $items = $this->sitemap->getItems();
+        $items = $this->manager->getItems();
 
         // count items
         $this->assertCount(3, $items);

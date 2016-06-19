@@ -20,13 +20,13 @@ interface SitemapManager
     public function getSitemaps();
 
     /**
-     * Adds sitemap to $sitemaps array.
+     * Add a sitemap to the sitemap container.
      *
      * @param  array  $sitemap
      *
      * @return self
      */
-    public function setSitemaps(array $sitemap);
+    public function setSitemap(array $sitemap);
 
     /**
      * Get the sitemap items.
@@ -200,7 +200,7 @@ interface SitemapManager
      *
      * @param  int  $max
      *
-     * @return $this
+     * @return self
      */
     public function limitSize($max = 50000);
 
