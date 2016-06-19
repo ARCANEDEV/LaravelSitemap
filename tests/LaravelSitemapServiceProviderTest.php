@@ -62,6 +62,8 @@ class LaravelSitemapServiceProviderTest extends TestCase
             \Arcanedev\LaravelSitemap\Contracts\SitemapManager::class,
             'sitemap.styler',
             \Arcanedev\LaravelSitemap\Contracts\SitemapStyler::class,
+            'sitemap.generator',
+            \Arcanedev\LaravelSitemap\Contracts\SitemapGenerator::class,
         ];
 
         $this->assertEquals($expected, $this->provider->provides());

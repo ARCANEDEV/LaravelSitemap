@@ -1,5 +1,6 @@
 <?php namespace Arcanedev\LaravelSitemap;
 
+use Arcanedev\LaravelSitemap\Contracts\SitemapGenerator;
 use Arcanedev\LaravelSitemap\Contracts\SitemapManager as SitemapManagerContract;
 use Arcanedev\LaravelSitemap\Contracts\SitemapStyler;
 use Illuminate\Contracts\Cache\Repository as Cache;
@@ -89,8 +90,8 @@ class SitemapManager implements SitemapManagerContract
     /** @var  \Illuminate\Filesystem\Filesystem */
     protected $filesystem;
 
-    /** @var \Arcanedev\LaravelSitemap\Contracts\SitemapStyler */
-    private $styler;
+    /** @var \Arcanedev\LaravelSitemap\Contracts\SitemapGenerator */
+    private $generator;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -99,21 +100,21 @@ class SitemapManager implements SitemapManagerContract
     /**
      * SitemapManager constructor.
      *
-     * @param  \Illuminate\Contracts\Cache\Repository             $cache
-     * @param  \Illuminate\Contracts\Config\Repository            $config
-     * @param  \Illuminate\Filesystem\Filesystem                  $filesystem
-     * @param  \Arcanedev\LaravelSitemap\Contracts\SitemapStyler  $styler
+     * @param  \Illuminate\Contracts\Cache\Repository                $cache
+     * @param  \Illuminate\Contracts\Config\Repository               $config
+     * @param  \Illuminate\Filesystem\Filesystem                     $filesystem
+     * @param  \Arcanedev\LaravelSitemap\Contracts\SitemapGenerator  $generator
      */
     public function __construct(
         Cache $cache,
         Config $config,
         Filesystem $filesystem,
-        SitemapStyler $styler
+        SitemapGenerator $generator
     ) {
         $this->cache      = $cache;
         $this->config     = $config;
         $this->filesystem = $filesystem;
-        $this->styler     = $styler;
+        $this->generator = $generator;
 
         $this->init();
     }
@@ -147,13 +148,13 @@ class SitemapManager implements SitemapManagerContract
     }
 
     /**
-     * Adds sitemap to $sitemaps array.
+     * Add a sitemap to the sitemap container.
      *
      * @param  array  $sitemap
      *
      * @return self
      */
-    public function setSitemaps(array $sitemap)
+    public function setSitemap(array $sitemap)
     {
         $this->sitemaps[] = $sitemap;
 
@@ -225,7 +226,7 @@ class SitemapManager implements SitemapManagerContract
      */
     public function getStyleLocation()
     {
-        return $this->styler->getLocation();
+        return $this->generator->getStylesLocation();
     }
 
     /**
@@ -237,7 +238,7 @@ class SitemapManager implements SitemapManagerContract
      */
     public function setStyleLocation($location)
     {
-        $this->styler->setLocation($location);
+        $this->generator->setStylesLocation($location);
 
         return $this;
     }
@@ -419,7 +420,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @param  int  $max
      *
-     * @return $this
+     * @return self
      */
     public function limitSize($max = 50000)
     {
@@ -435,7 +436,7 @@ class SitemapManager implements SitemapManagerContract
      */
     public function getUseStyles()
     {
-        return $this->styler->isEnabled();
+        return $this->generator->isStylesEnabled();
     }
 
     /**
@@ -447,7 +448,7 @@ class SitemapManager implements SitemapManagerContract
      */
     public function setUseStyles($useStyles)
     {
-        $this->styler->setEnabled($useStyles);
+        $this->generator->setUseStyles($useStyles);
 
         return $this;
     }
@@ -475,8 +476,7 @@ class SitemapManager implements SitemapManagerContract
         $translations = [], $videos = [], $googlenews = [], $alternates = []
     ) {
         $this->addItem(compact(
-            'loc', 'lastmod', 'priority', 'freq', 'images', 'title',
-            'translations', 'videos', 'googlenews', 'alternates'
+            'loc', 'lastmod', 'priority', 'freq', 'images', 'title', 'translations', 'videos', 'googlenews', 'alternates'
         ));
     }
 
@@ -508,7 +508,7 @@ class SitemapManager implements SitemapManagerContract
      */
     public function addSitemap($loc, $lastmod = null)
     {
-        $this->setSitemaps(compact('loc', 'lastmod'));
+        $this->setSitemap(compact('loc', 'lastmod'));
     }
 
     /**
@@ -567,17 +567,12 @@ class SitemapManager implements SitemapManagerContract
         if ( ! $this->getTitle())
             $this->setTitle('SitemapManager for ' . $this->getLink());
 
-        // check if styles are enabled
-        $data = [
-            'style' => $this->styler->get($format, $style),
-        ];
+        $data = [];
 
-        if ($format === SitemapStyler::SITEMAPINDEX_FORMAT) {
+        if ($format === SitemapStyler::SITEMAPINDEX_FORMAT)
             $data['sitemaps'] = $this->getSitemaps();
-        }
-        else {
+        else
             $data['items']    = $this->getItems();
-        }
 
         if (in_array($format, ['ror-rss', 'ror-rdf', 'html'])) {
             $data['channel'] = [
@@ -586,20 +581,7 @@ class SitemapManager implements SitemapManagerContract
             ];
         }
 
-        $contentTypes = [
-            'ror-rss'      => 'text/rss+xml; charset=utf-8',
-            'ror-rdf'      => 'text/rdf+xml; charset=utf-8',
-            'html'         => 'text/html',
-            'txt'          => 'text/plain',
-            'sitemapindex' => 'text/xml; charset=utf-8',
-        ];
-
-        return [
-            'content' => view("sitemap::$format", $data)->render(),
-            'headers' => [
-                'Content-type' => array_get($contentTypes, $format, 'text/xml; charset=utf-8')
-            ],
-        ];
+        $this->generator->generate($data, $format, $style);
     }
 
     /**
@@ -685,10 +667,9 @@ class SitemapManager implements SitemapManagerContract
 
         $data = $this->generate($format, $style);
 
-
         // if custom path
         $file = $path == null
-            ? public_path() . DS . "$filename.$extension"
+            ? public_path("$filename.$extension")
             : $path . DS . "$filename.$extension";
 
         // must return something

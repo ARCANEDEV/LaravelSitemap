@@ -4,14 +4,14 @@
         <title>{{ $channel['title'] }}</title>
         <link>{{ $channel['link'] }}</link>
         @foreach($items as $item)
-            <item>
-                <link>{{ $item->getLoc() }}</link>
-                <title>{{ $item->getTitle() }}</title>
-                <ror:updated>{{ $item->getLastmod() }}</ror:updated>
-                <ror:updatePeriod>{{ $item->getFreq() }}</ror:updatePeriod>
-                <ror:sortOrder>{{ $item->getPriority() }}</ror:sortOrder>
-                <ror:resourceOf>sitemap</ror:resourceOf>
-            </item>
+        <item>
+            <link>{{ $item->getLoc() }}</link>
+            <title>{{ $item->getTitle() }}</title>
+            <ror:updated>{{ $item->getLastmod() }}</ror:updated>
+            <ror:updatePeriod>{{ $item->getFreq() }}</ror:updatePeriod>
+            <ror:sortOrder>{{ $item->getPriority() }}</ror:sortOrder>
+            <ror:resourceOf>sitemap</ror:resourceOf>
+        </item>
         @endforeach
     </channel>
 </rss>
