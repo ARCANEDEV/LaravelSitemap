@@ -581,7 +581,7 @@ class SitemapManager implements SitemapManagerContract
             ];
         }
 
-        $this->generator->generate($data, $format, $style);
+        return $this->generator->generate($data, $format, $style);
     }
 
     /**
