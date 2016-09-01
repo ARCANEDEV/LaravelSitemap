@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 @if ($style)
-<?xml-stylesheet href="{{ $style }}" type="text/xsl"?>
+    <?php echo '<?xml-stylesheet href="'.$style.'" type="text/xsl"?>'; ?>
 @endif
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     @foreach ($items as $item)
-    <?php $googlenews = $item->getGooglenews() ?>
     <url>
         <loc>{{ $item->getLoc() }}</loc>
         @if ($item->getLastmod())
@@ -17,6 +14,7 @@
             <xhtml:link rel="alternate" media="{{ $alternate['media'] }}" href="{{ $alternate['url'] }}" />
             @endforeach
         @endif
+        <?php $googlenews = $item->getGooglenews() ?>
         <news:news>
             <news:publication>
                 <news:name>{{ $googlenews['sitename'] }}</news:name>

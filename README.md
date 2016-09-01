@@ -15,6 +15,14 @@
 
 This package is inspired/based on [RoumenDamianoff/laravel-sitemap](https://github.com/RoumenDamianoff/laravel-sitemap).
 
+### Features
+
+  * Easy setup &amp; configuration.
+  * Well documented &amp; IDE Friendly.
+  * Well tested with maximum code quality.
+  * Laravel `5.1 | 5.2 | 5.3` are supported.
+  * Made with :heart: &amp; :coffee:.
+  
 ## Table of contents
 
 1. [Requirements](_docs/1.Requirements.md)
@@ -25,12 +33,7 @@ This package is inspired/based on [RoumenDamianoff/laravel-sitemap](https://gith
 ## TODOS
 
   - [ ] Documentation.
-  - [ ] 100% Code coverage + Maximum code quality.
-  - [ ] Laravel 5.3 support.
-  - [x] Laravel 5.2 support.
-  - [x] Laravel 5.1 support.
-  - [ ] Laravel 5.0 support.
-  - [x] Well documented package (IDE Friendly).
+  - [ ] 100% Code coverage.
 
 ## Contribution
 
@@ -46,7 +49,7 @@ If you discover any security related issues, please email arcanedev.maroc@gmail.
 - [RoumenDamianoff/laravel-sitemap](https://github.com/RoumenDamianoff/laravel-sitemap)
 - [All Contributors][link-contributors]
 
-[badge_laravel]:      https://img.shields.io/badge/For-Laravel%205.x-orange.svg?style=flat-square
+[badge_laravel]:      https://img.shields.io/badge/Laravel-%205.1|5.2|5.3-orange.svg?style=flat-square
 [badge_license]:      https://img.shields.io/packagist/l/arcanedev/laravel-sitemap.svg?style=flat-square
 [badge_build]:        https://img.shields.io/travis/ARCANEDEV/LaravelSitemap.svg?style=flat-square
 [badge_hhvm]:         https://img.shields.io/hhvm/arcanedev/laravel-sitemap.svg?style=flat-square
