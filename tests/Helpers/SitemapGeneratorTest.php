@@ -81,10 +81,6 @@ class SitemapGeneratorTest extends TestCase
     /** @test */
     public function it_can_generate()
     {
-        if ($this->isHHVM()) {
-            $this->markTestSkipped('Must be revisited on HHVM.');
-        }
-
         $expectations = [
             'xml'     => [
                 'data' => [
