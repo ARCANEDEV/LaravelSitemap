@@ -58,11 +58,8 @@ class LaravelSitemapServiceProviderTest extends TestCase
     public function it_can_provides()
     {
         $expected = [
-            'sitemap.manager',
             \Arcanedev\LaravelSitemap\Contracts\SitemapManager::class,
-            'sitemap.styler',
             \Arcanedev\LaravelSitemap\Contracts\SitemapStyler::class,
-            'sitemap.generator',
             \Arcanedev\LaravelSitemap\Contracts\SitemapGenerator::class,
         ];
 

@@ -27,7 +27,7 @@ class SitemapStylerTest extends TestCase
         parent::setUp();
 
         $this->publishStyles();
-        $this->styler = $this->app->make('sitemap.styler');
+        $this->styler = $this->app->make(\Arcanedev\LaravelSitemap\Contracts\SitemapStyler::class);
     }
 
     public function tearDown()
