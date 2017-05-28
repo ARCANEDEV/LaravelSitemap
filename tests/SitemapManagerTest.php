@@ -23,7 +23,7 @@ class SitemapManagerTest extends TestCase
     {
         parent::setUp();
 
-        $this->manager = $this->app->make('sitemap.manager');
+        $this->manager = $this->app->make(\Arcanedev\LaravelSitemap\Contracts\SitemapManager::class);
     }
 
     public function tearDown()

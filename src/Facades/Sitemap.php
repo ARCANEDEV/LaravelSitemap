@@ -1,5 +1,6 @@
 <?php namespace Arcanedev\LaravelSitemap\Facades;
 
+use Arcanedev\LaravelSitemap\Contracts\SitemapManager;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -15,5 +16,5 @@ class Sitemap extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'sitemap.manager'; }
+    protected static function getFacadeAccessor() { return SitemapManager::class; }
 }

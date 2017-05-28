@@ -10,10 +10,11 @@ use Arcanedev\LaravelSitemap\Contracts\SitemapFrequency as SitemapFrequencyContr
  */
 class SitemapFrequency implements SitemapFrequencyContract
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get all the valid frequency keys.
      *
@@ -50,7 +51,7 @@ class SitemapFrequency implements SitemapFrequencyContract
      */
     public static function get($key, $locale = null)
     {
-        return trans("sitemap::frequencies.$key", [], 'messages', $locale);
+        return trans("sitemap::frequencies.$key", [], $locale);
     }
 
     /**

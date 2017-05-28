@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelSitemap\Entities;
 
 use ArrayAccess;
+use Illuminate\Support\Arr;
 
 /**
  * Class     SitemapItem
@@ -10,10 +11,11 @@ use ArrayAccess;
  */
 class SitemapItem implements ArrayAccess
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * URL of the page.
      *
@@ -62,10 +64,11 @@ class SitemapItem implements ArrayAccess
     /** @var array */
     protected $alternates   = [];
 
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Constructor
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * SitemapItem constructor.
      *
@@ -88,10 +91,11 @@ class SitemapItem implements ArrayAccess
         if ($escape) $this->escape();
     }
 
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters & Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * @return string
      */
@@ -275,9 +279,9 @@ class SitemapItem implements ArrayAccess
      */
     public function setGooglenews(array $googlenews)
     {
-        $this->googlenews['sitename']         = array_get($googlenews, 'sitename', '');
-        $this->googlenews['language']         = array_get($googlenews, 'language', 'en');
-        $this->googlenews['publication_date'] = array_get($googlenews, 'publication_date', date('Y-m-d H:i:s'));
+        $this->googlenews['sitename']         = Arr::get($googlenews, 'sitename', '');
+        $this->googlenews['language']         = Arr::get($googlenews, 'language', 'en');
+        $this->googlenews['publication_date'] = Arr::get($googlenews, 'publication_date', date('Y-m-d H:i:s'));
 
         return $this;
     }
