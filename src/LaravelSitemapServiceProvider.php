@@ -30,21 +30,6 @@ class LaravelSitemapServiceProvider extends ServiceProvider
     protected $defer   = true;
 
     /* -----------------------------------------------------------------
-     |  Getters & Setters
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the base path of the package.
-     *
-     * @return string
-     */
-    public function getBasePath()
-    {
-        return dirname(__DIR__);
-    }
-
-    /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
@@ -74,7 +59,7 @@ class LaravelSitemapServiceProvider extends ServiceProvider
         $this->publishTranslations();
 
         $this->publishes([
-            $this->getBasePath() . '/public' => public_path(Helpers\SitemapStyler::VENDOR_PATH)
+            $this->getBasePath().'/public' => public_path(Helpers\SitemapStyler::VENDOR_PATH)
         ], 'public');
     }
 
