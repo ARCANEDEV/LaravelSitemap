@@ -449,9 +449,9 @@ class SitemapItem implements ArrayAccess
     {
         if ($this->videos) {
             foreach ($this->videos as $k => $video) {
-                if ($video['title'])
+                if ( ! empty($video['title']))
                     $this->videos[$k]['title']       = htmlentities($video['title'], ENT_XML1);
-                if ($video['description'])
+                if ( ! empty($video['description']))
                     $this->videos[$k]['description'] = htmlentities($video['description'], ENT_XML1);
             }
         }
