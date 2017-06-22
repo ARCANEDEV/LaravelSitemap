@@ -103,7 +103,7 @@ class LaravelSitemapServiceProvider extends ServiceProvider
      */
     private function registerSitemapManager()
     {
-        $this->app->bind(Contracts\SitemapManager::class, function ($app) {
+        $this->bind(Contracts\SitemapManager::class, function ($app) {
             /**
              * @var  \Illuminate\Contracts\Config\Repository               $config
              * @var  \Illuminate\Contracts\Cache\Factory                   $cache
