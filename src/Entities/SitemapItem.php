@@ -306,10 +306,11 @@ class SitemapItem implements ArrayAccess
         return $this;
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  ArrayAccess Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  ArrayAccess Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Whether a offset exists
      * @link  http://php.net/manual/en/arrayaccess.offsetexists.php
@@ -365,10 +366,11 @@ class SitemapItem implements ArrayAccess
         $this->offsetSet($offset, null);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Make a new sitemap item.
      *
@@ -396,10 +398,11 @@ class SitemapItem implements ArrayAccess
         $this->escapeGooglenews();
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
      */
+
     private function escapeLoc()
     {
         $this->setLoc(htmlentities($this->loc, ENT_XML1));
@@ -449,9 +452,9 @@ class SitemapItem implements ArrayAccess
     {
         if ($this->videos) {
             foreach ($this->videos as $k => $video) {
-                if ($video['title'])
+                if ( ! empty($video['title']))
                     $this->videos[$k]['title']       = htmlentities($video['title'], ENT_XML1);
-                if ($video['description'])
+                if ( ! empty($video['description']))
                     $this->videos[$k]['description'] = htmlentities($video['description'], ENT_XML1);
             }
         }

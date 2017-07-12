@@ -11,10 +11,11 @@ use Arcanedev\LaravelSitemap\Tests\TestCase;
  */
 class SitemapFrequencyTest extends TestCase
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Test Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Tests
+     | -----------------------------------------------------------------
      */
+
     /** @test */
     public function it_can_get_keys()
     {
@@ -51,5 +52,15 @@ class SitemapFrequencyTest extends TestCase
         foreach ($expectations as $key => $expected) {
             $this->assertSame($expected, SitemapFrequency::exists($key));
         }
+    }
+
+    /** @test */
+    public function it_can_get_translated_one()
+    {
+        $this->assertSame('Always', SitemapFrequency::get('always'));
+
+        $this->assertSame('sitemap::frequencies.century', SitemapFrequency::get('century'));
+
+        $this->assertSame('Toujours', SitemapFrequency::get('always', 'fr'));
     }
 }
