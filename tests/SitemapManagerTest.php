@@ -313,6 +313,38 @@ class SitemapManagerTest extends TestCase
         }
     }
 
+    /** @test */
+    public function it_can_respond_with_http_response()
+    {
+        $response = $this->manager->respond();
+
+        $this->assertInstanceOf(\Illuminate\Http\Response::class, $response);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('', $response->getContent());
+        $this->assertSame('application/xml', $response->headers->get('content-type'));
+
+        $this->populatedManager();
+
+        $response = $this->manager->respond();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertMatchesXmlSnapshot($response->getContent());
+        $this->assertSame('application/xml', $response->headers->get('content-type'));
+
+        $response = $this->manager->format('txt')->respond();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertMatchesSnapshot($response->getContent());
+        $this->assertSame('text/plain', $response->headers->get('content-type'));
+
+        $response = $this->manager->format('rss')->respond('blog');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertMatchesSnapshot($response->getContent());
+        $this->assertSame('application/rss+xml', $response->headers->get('content-type'));
+    }
+
     /* -----------------------------------------------------------------
      |  Other Methods
      | -----------------------------------------------------------------
