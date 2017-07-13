@@ -1,20 +1,15 @@
 <?php
 
-use Arcanedev\LaravelSitemap\Contracts\SitemapFrequency;
+use Arcanedev\LaravelSitemap\Contracts\Entities\ChangeFrequency;
 
 return [
 
-    /* -----------------------------------------------------------------
-     |  Frequencies
-     | -----------------------------------------------------------------
-     */
-
-    SitemapFrequency::ALWAYS  => 'Always',
-    SitemapFrequency::HOURLY  => 'Hourly',
-    SitemapFrequency::DAILY   => 'Daily',
-    SitemapFrequency::WEEKLY  => 'Weekly',
-    SitemapFrequency::MONTHLY => 'Monthly',
-    SitemapFrequency::YEARLY  => 'Yearly',
-    SitemapFrequency::NEVER   => 'Never',
+    ChangeFrequency::ALWAYS  => 'Always',
+    ChangeFrequency::HOURLY  => 'Hourly',
+    ChangeFrequency::DAILY   => 'Daily',
+    ChangeFrequency::WEEKLY  => 'Weekly',
+    ChangeFrequency::MONTHLY => 'Monthly',
+    ChangeFrequency::YEARLY  => 'Yearly',
+    ChangeFrequency::NEVER   => 'Never',
 
 ];

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:ror="http://rorweb.com/0.1/" version="2.0">
+  <channel>
+    <title>XML Sitemaps RSS Feed</title>
+    <link>http://example.com/sitemap-pages.xml</link>
+    <item>
+      <title/>
+      <link>http://example.com/</link>
+      <ror:updated>2017-01-01T00:00:00+00:00</ror:updated>
+      <ror:updatePeriod>daily</ror:updatePeriod>
+      <ror:sortOrder>0.8</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <title/>
+      <link>http://example.com/about-us</link>
+      <ror:updated>2017-01-01T00:00:00+00:00</ror:updated>
+      <ror:updatePeriod>daily</ror:updatePeriod>
+      <ror:sortOrder>0.8</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+    <item>
+      <title/>
+      <link>http://example.com/contact</link>
+      <ror:updated>2017-01-01T00:00:00+00:00</ror:updated>
+      <ror:updatePeriod>daily</ror:updatePeriod>
+      <ror:sortOrder>0.8</ror:sortOrder>
+      <ror:resourceOf>sitemap</ror:resourceOf>
+    </item>
+  </channel>
+</rss>
