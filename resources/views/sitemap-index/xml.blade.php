@@ -5,16 +5,17 @@
     <?php /** @var  \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap $sitemap */ ?>
     @foreach($sitemaps as $name => $sitemap)
     <sitemap>
-        @if (! empty($name))
+        @unless (empty($name))
         <loc>{{ $sitemap->getPath() }}</loc>
-        @endif
+        @endunless
 
         <?php
-        /** @var  \Arcanedev\LaravelSitemap\Contracts\Entities\Url $latest */
-        $latest = $sitemap->getUrls()->last(function (\Arcanedev\LaravelSitemap\Contracts\Entities\Url $url) {
-        return $url->getLastMod();
-        });
+            /** @var  \Arcanedev\LaravelSitemap\Contracts\Entities\Url $latest */
+            $latest = $sitemap->getUrls()->last(function (\Arcanedev\LaravelSitemap\Contracts\Entities\Url $url) {
+                return $url->getLastMod();
+            });
         ?>
+
         @unless (is_null($latest))
         <lastmod>{{ $latest->getLastMod()->format(DateTime::ATOM) }}</lastmod>
         @endunless

@@ -11,23 +11,25 @@
         ?>
         @foreach($sitemap->getUrls() as $url)
         <item>
+            @if ($url->has('loc'))
             <title>{{ $url->getTitle() }}</title>
+            @endif
 
-            @unless (empty($url->loc()))
+            @if ($url->has('loc'))
             <link>{{ $url->loc() }}</link>
-            @endunless
+            @endif
 
-            @unless (empty($url->lastMod()))
+            @if ($url->has('lastmod'))
             <ror:updated>{{ $url->formatLastMod() }}</ror:updated>
-            @endunless
+            @endif
 
-            @unless (empty($url->changeFreq()))
+            @if ($url->has('changefreq'))
             <ror:updatePeriod>{{ $url->changeFreq() }}</ror:updatePeriod>
-            @endunless
+            @endif
 
-            @unless (empty($url->priority()))
+            @if ($url->has('priority'))
             <ror:sortOrder>{{ $url->priority() }}</ror:sortOrder>
-            @endunless
+            @endif
 
             <ror:resourceOf>sitemap</ror:resourceOf>
         </item>

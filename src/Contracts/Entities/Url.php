@@ -157,4 +157,13 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      * @return \Arcanedev\LaravelSitemap\Entities\Url
      */
     public static function make($loc);
+
+    /**
+     * Make a URL instance with attributes.
+     *
+     * @param  array  $attributes
+     *
+     * @return \Arcanedev\LaravelSitemap\Entities\Url
+     */
+    public static function makeFromArray(array $attributes);
 }

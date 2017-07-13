@@ -117,6 +117,20 @@ class Sitemap implements SitemapContract
     }
 
     /**
+     * Add many urls to the collection.
+     *
+     * @param  array|\Illuminate\Support\Collection  $urls
+     *
+     * @return self
+     */
+    public function addMany($urls)
+    {
+        foreach ($urls as $url) { $this->add($url); }
+
+        return $this;
+    }
+
+    /**
      * Create and Add a sitemap URL to the collection.
      *
      * @param  string    $loc

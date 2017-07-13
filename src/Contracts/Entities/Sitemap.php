@@ -71,6 +71,15 @@ interface Sitemap extends Arrayable, Countable, Jsonable, JsonSerializable
     public function add(Url $url);
 
     /**
+     * Add many urls to the collection.
+     *
+     * @param  array  $urls
+     *
+     * @return self
+     */
+    public function addMany($urls);
+
+    /**
      * Create and Add a sitemap URL to the collection.
      *
      * @param  string    $loc

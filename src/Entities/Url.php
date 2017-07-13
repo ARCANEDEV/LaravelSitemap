@@ -2,10 +2,9 @@
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\Url as UrlContract;
 use Arcanedev\LaravelSitemap\Exceptions\SitemapException;
-use ArrayAccess;
 use DateTime;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Illuminate\Support\Fluent;
 
 /**
  * Class     Url
@@ -13,28 +12,8 @@ use Illuminate\Support\Str;
  * @package  Arcanedev\LaravelSitemap\Entities
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class Url implements ArrayAccess, UrlContract
+class Url extends Fluent implements UrlContract
 {
-    /* -----------------------------------------------------------------
-     |  Properties
-     | -----------------------------------------------------------------
-     */
-
-    /** @var  string  */
-    protected $loc;
-
-    /** @var  string|null */
-    protected $title;
-
-    /** @var  \DateTimeInterface */
-    protected $lastModDate;
-
-    /** @var  string */
-    protected $changeFrequency;
-
-    /** @var  float */
-    protected $priority;
-
     /* -----------------------------------------------------------------
      |  Constructor
      | -----------------------------------------------------------------
@@ -45,10 +24,12 @@ class Url implements ArrayAccess, UrlContract
      *
      * @param  array|string  $attributes
      */
-    public function __construct($attributes)
+    public function __construct($attributes = [])
     {
         if (is_string($attributes))
             $attributes = ['loc' => $attributes];
+
+        parent::__construct($attributes);
 
         $this->setLoc(Arr::get($attributes, 'loc'));
         $this->setLastMod(Arr::get($attributes, 'lastmod', new DateTime));
@@ -69,7 +50,7 @@ class Url implements ArrayAccess, UrlContract
      */
     public function getLoc()
     {
-        return $this->escape($this->loc);
+        return $this->escape($this->get('loc'));
     }
 
     /**
@@ -95,9 +76,7 @@ class Url implements ArrayAccess, UrlContract
      */
     public function setLoc($loc)
     {
-        $this->loc = $this->checkLoc($loc);
-
-        return $this;
+        return $this->set('loc', $this->checkLoc($loc));
     }
 
     /**
@@ -107,7 +86,7 @@ class Url implements ArrayAccess, UrlContract
      */
     public function getLastMod()
     {
-        return $this->lastModDate;
+        return $this->get('lastmod');
     }
 
     /**
@@ -147,9 +126,7 @@ class Url implements ArrayAccess, UrlContract
         if (is_string($lastModDate))
             $lastModDate = DateTime::createFromFormat($format, $lastModDate);
 
-        $this->lastModDate = $lastModDate;
-
-        return $this;
+        return $this->set('lastmod', $lastModDate);
     }
 
     /**
@@ -159,7 +136,7 @@ class Url implements ArrayAccess, UrlContract
      */
     public function getChangeFreq()
     {
-        return $this->changeFrequency;
+        return $this->get('changefreq');
     }
 
     /**
@@ -183,9 +160,7 @@ class Url implements ArrayAccess, UrlContract
      */
     public function setChangeFreq($changeFreq)
     {
-        $this->changeFrequency = strtolower(trim($changeFreq));
-
-        return $this;
+        return $this->set('changefreq', strtolower(trim($changeFreq)));
     }
 
     /**
@@ -195,7 +170,7 @@ class Url implements ArrayAccess, UrlContract
      */
     public function getPriority()
     {
-        return $this->priority;
+        return $this->get('priority');
     }
 
     /**
@@ -221,9 +196,9 @@ class Url implements ArrayAccess, UrlContract
      */
     public function setPriority($priority)
     {
-        $this->priority = $this->checkPriority($priority);
+        $priority = $this->checkPriority($priority);
 
-        return $this;
+        return $this->set('priority', $priority);
     }
 
     /**
@@ -233,7 +208,7 @@ class Url implements ArrayAccess, UrlContract
      */
     public function getTitle()
     {
-        return $this->escape($this->title);
+        return $this->escape($this->get('title'));
     }
 
     /**
@@ -245,9 +220,7 @@ class Url implements ArrayAccess, UrlContract
      */
     public function setTitle($title)
     {
-        $this->title = $title;
-
-        return $this;
+        return $this->set('title', $title);
     }
 
     /* -----------------------------------------------------------------
@@ -280,47 +253,48 @@ class Url implements ArrayAccess, UrlContract
     }
 
     /**
-     * Get the collection of items as a plain array.
+     * Convert the Fluent instance to an array.
      *
      * @return array
      */
     public function toArray()
     {
-        return [
-            'title'      => $this->getTitle(),
-            'loc'        => $this->getLoc(),
-            'lastmod'    => $this->formatLastMod(),
-            'changefreq' => $this->getChangeFreq(),
-            'priority'   => $this->getPriority(),
-        ];
-    }
-
-    /**
-     * Get the sitemap url as JSON.
-     *
-     * @param  int  $options
-     *
-     * @return string
-     */
-    public function toJson($options = 0)
-    {
-        return json_encode($this->jsonSerialize(), $options);
-    }
-
-    /**
-     * Convert the object into something JSON serializable.
-     *
-     * @return array
-     */
-    public function jsonSerialize()
-    {
-        return $this->toArray();
+        return array_merge(parent::toArray(), [
+            'lastmod' => $this->formatLastMod(),
+        ]);
     }
 
     /* -----------------------------------------------------------------
      |  Other Methods
      | -----------------------------------------------------------------
      */
+
+    /**
+     * Set an attribute.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     *
+     * @return self
+     */
+    protected function set($key, $value)
+    {
+        $this->attributes[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Check if has an attribute.
+     *
+     * @param  string  $key
+     *
+     * @return bool
+     */
+    protected function has($key)
+    {
+        return ! is_null($this->get($key));
+    }
 
     /**
      * Escape the given value.
@@ -338,49 +312,6 @@ class Url implements ArrayAccess, UrlContract
             ? htmlentities($value, ENT_XML1, 'UTF-8')
             : $value;
     }
-
-    /**
-     * Determine if the given attribute exists.
-     *
-     * @param  mixed  $offset
-     *
-     * @return bool
-     */
-    public function offsetExists($offset)
-    {
-        return method_exists($this, 'get'.Str::studly($offset));
-    }
-
-    /**
-     * Get the value for a given offset.
-     *
-     * @param  mixed  $offset
-     *
-     * @return mixed
-     */
-    public function offsetGet($offset)
-    {
-        return call_user_func([$this, 'get'.Str::studly($offset)]);
-    }
-
-    /**
-     * Set the value for a given offset.
-     *
-     * @param  mixed  $offset
-     * @param  mixed  $value
-     *
-     * @return void
-     */
-    public function offsetSet($offset, $value) {} // Do nothing...
-
-    /**
-     * Unset the value for a given offset.
-     *
-     * @param  mixed  $offset
-     *
-     * @return void
-     */
-    public function offsetUnset($offset) {} // Do nothing...
 
     /**
      * Check the loc value.
