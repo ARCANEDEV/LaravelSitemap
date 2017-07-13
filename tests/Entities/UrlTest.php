@@ -100,11 +100,11 @@ class UrlTest extends TestCase
         $this->assertInstanceOf(\Arcanedev\LaravelSitemap\Entities\Url::class, $url);
 
         $expected = [
-            'title'      => null,
             'loc'        => 'http://example.com',
             'lastmod'    => $url->formatLastMod(),
             'changefreq' => 'daily',
             'priority'   => 0.8,
+            'title'      => null,
         ];
 
         $this->assertSame($expected, $url->toArray());
@@ -190,11 +190,11 @@ class UrlTest extends TestCase
         $this->url->setLastMod('2017-01-01 00:00:00');
 
         $expected = [
-            'title'      => null,
             'loc'        => 'http://example.com',
             'lastmod'    => '2017-01-01T00:00:00+00:00',
             'changefreq' => 'daily',
             'priority'   => 0.8,
+            'title'      => null,
         ];
 
         $this->assertSame($expected, $array = $this->url->toArray());

@@ -10,21 +10,21 @@
     ?>
     @foreach($sitemap->getUrls() as $url)
         <url>
-            @unless (empty($url->loc()))
+            @if ($url->has('loc'))
             <loc>{{ $url->loc() }}</loc>
-            @endunless
+            @endif
 
-            @unless (empty($url->lastMod()))
+            @if ($url->has('lastmod'))
             <lastmod>{{ $url->formatLastMod() }}</lastmod>
-            @endunless
+            @endif
 
-            @unless (empty($url->changeFreq()))
+            @if ($url->has('changefreq'))
             <changefreq>{{ $url->changeFreq() }}</changefreq>
-            @endunless
+            @endif
 
-            @unless (empty($url->priority()))
+            @if ($url->has('priority'))
             <priority>{{ $url->priority() }}</priority>
-            @endunless
+            @endif
         </url>
     @endforeach
 </urlset>

@@ -139,11 +139,11 @@ class SitemapTest extends TestCase
 
         $expected = [
             [
-                'title'      => 'Example - Homepage',
                 'loc'        => 'http://example.com',
                 'lastmod'    => '2017-01-01T00:00:00+00:00',
                 'changefreq' => 'always',
                 'priority'   => 1.0,
+                'title'      => 'Example - Homepage',
             ]
         ];
 
@@ -220,23 +220,23 @@ class SitemapTest extends TestCase
 
         $expected = [
             [
-                'title'      => null,
                 'loc'        => 'http://example.com',
                 'lastmod'    => $formattedDate,
                 'changefreq' => 'daily',
                 'priority'   => 0.8,
-            ],[
                 'title'      => null,
+            ],[
                 'loc'        => 'http://example.com/about-us',
                 'lastmod'    => $formattedDate,
                 'changefreq' => 'daily',
                 'priority'   => 0.8,
-            ],[
                 'title'      => null,
+            ],[
                 'loc'        => 'http://example.com/contact',
                 'lastmod'    => $formattedDate,
                 'changefreq' => 'daily',
                 'priority'   => 0.8,
+                'title'      => null,
             ],
         ];
 
