@@ -200,7 +200,9 @@ class SitemapTest extends TestCase
     /** @test */
     public function it_can_set_urls()
     {
-        $this->assertSame(0, $this->sitemap->count());
+        $this->sitemap->add($this->createUrlSample());
+
+        $this->assertSame(1, $this->sitemap->count());
 
         $urls = collect([
             ['loc' => 'http://example.com'],
@@ -221,6 +223,60 @@ class SitemapTest extends TestCase
         $expected = [
             [
                 'loc'        => 'http://example.com',
+                'lastmod'    => $formattedDate,
+                'changefreq' => 'daily',
+                'priority'   => 0.8,
+                'title'      => null,
+            ],[
+                'loc'        => 'http://example.com/about-us',
+                'lastmod'    => $formattedDate,
+                'changefreq' => 'daily',
+                'priority'   => 0.8,
+                'title'      => null,
+            ],[
+                'loc'        => 'http://example.com/contact',
+                'lastmod'    => $formattedDate,
+                'changefreq' => 'daily',
+                'priority'   => 0.8,
+                'title'      => null,
+            ],
+        ];
+
+        $this->assertSame($expected, $this->sitemap->toArray());
+    }
+
+    /** @test */
+    public function it_can_add_many_urls_to_the_collection()
+    {
+        $this->sitemap->add($this->createUrlSample());
+
+        $this->assertSame(1, $this->sitemap->count());
+
+        $urls = collect([
+            ['loc' => 'http://example.com/news'],
+            ['loc' => 'http://example.com/about-us'],
+            ['loc' => 'http://example.com/contact'],
+        ]);
+
+        $now = new \DateTime;
+
+        $this->sitemap->addMany($urls->transform(function (array $item) use ($now) {
+            return Url::makeFromArray($item)->setLastMod($now);
+        }));
+
+        $this->assertSame(4, $this->sitemap->count());
+
+        $formattedDate = $now->format(\DateTime::ATOM);
+
+        $expected = [
+            [
+                'loc'        => 'http://example.com',
+                'lastmod'    => '2017-01-01T00:00:00+00:00',
+                'changefreq' => 'always',
+                'priority'   => 1.0,
+                'title'      => 'Example - Homepage',
+            ],[
+                'loc'        => 'http://example.com/news',
                 'lastmod'    => $formattedDate,
                 'changefreq' => 'daily',
                 'priority'   => 0.8,

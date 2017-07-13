@@ -11,7 +11,7 @@
     @foreach($sitemap->getUrls() as $url)
         <url>
             @if ($url->has('loc'))
-            <loc>{{ $url->loc() }}</loc>
+            <loc>{{ $url->get('loc') }}</loc>
             @endif
 
             @if ($url->has('lastmod'))
@@ -19,11 +19,11 @@
             @endif
 
             @if ($url->has('changefreq'))
-            <changefreq>{{ $url->changeFreq() }}</changefreq>
+            <changefreq>{{ $url->get('changefreq') }}</changefreq>
             @endif
 
             @if ($url->has('priority'))
-            <priority>{{ $url->priority() }}</priority>
+            <priority>{{ $url->get('priority') }}</priority>
             @endif
         </url>
     @endforeach

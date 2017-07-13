@@ -4,7 +4,6 @@
     <title>XML Sitemaps RSS Feed</title>
     <link>http://example.com/sitemap-pages.xml</link>
     <item>
-      <title/>
       <link>http://example.com/</link>
       <ror:updated>2017-01-01T00:00:00+00:00</ror:updated>
       <ror:updatePeriod>daily</ror:updatePeriod>
@@ -12,7 +11,6 @@
       <ror:resourceOf>sitemap</ror:resourceOf>
     </item>
     <item>
-      <title/>
       <link>http://example.com/about-us</link>
       <ror:updated>2017-01-01T00:00:00+00:00</ror:updated>
       <ror:updatePeriod>daily</ror:updatePeriod>
@@ -20,7 +18,6 @@
       <ror:resourceOf>sitemap</ror:resourceOf>
     </item>
     <item>
-      <title/>
       <link>http://example.com/contact</link>
       <ror:updated>2017-01-01T00:00:00+00:00</ror:updated>
       <ror:updatePeriod>daily</ror:updatePeriod>
