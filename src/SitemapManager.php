@@ -185,6 +185,20 @@ class SitemapManager implements SitemapManagerContract
     }
 
     /**
+     * Render the Http response.
+     *
+     * @param  string  $name
+     * @param  int     $status
+     * @param  array   $headers
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function respond($name = null, $status = 200, array $headers = [])
+    {
+        return response($this->render($name), $status, array_merge($this->getResponseHeaders(), $headers));
+    }
+
+    /**
      * Get the collection of items as a plain array.
      *
      * @return array
@@ -233,5 +247,19 @@ class SitemapManager implements SitemapManagerContract
                 SitemapBuilder::make()->build($key, $chunks, $this->format)
             );
         }
+    }
+
+    /**
+     * Get the response header.
+     *
+     * @return array
+     */
+    protected function getResponseHeaders()
+    {
+        return array_get([
+            'xml' => ['Content-Type' => 'application/xml'],
+            'rss' => ['Content-Type' => 'application/rss+xml'],
+            'txt' => ['Content-Type' => 'text/plain'],
+        ], $this->format, []);
     }
 }

@@ -106,4 +106,15 @@ interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializabl
      * @return self
      */
     public function save($path, $name = null);
+
+    /**
+     * Render the Http response.
+     *
+     * @param  string  $name
+     * @param  int     $status
+     * @param  array   $headers
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function respond($name = null, $status = 200, array $headers = []);
 }
