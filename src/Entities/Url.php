@@ -54,18 +54,6 @@ class Url extends Fluent implements UrlContract
     }
 
     /**
-     * Get the url location (alias).
-     *
-     * @see getLoc()
-     *
-     * @return string
-     */
-    public function loc()
-    {
-        return $this->getLoc();
-    }
-
-    /**
      * Set the url location.
      *
      * @param  string  $loc
@@ -87,18 +75,6 @@ class Url extends Fluent implements UrlContract
     public function getLastMod()
     {
         return $this->get('lastmod');
-    }
-
-    /**
-     * Get the last modification date (alias).
-     *
-     * @see getLastMod()
-     *
-     * @return \DateTimeInterface
-     */
-    public function lastMod()
-    {
-        return $this->getLastMod();
     }
 
     /**
@@ -140,18 +116,6 @@ class Url extends Fluent implements UrlContract
     }
 
     /**
-     * Get the change frequency (alias).
-     *
-     * @see getChangeFreq()
-     *
-     * @return string
-     */
-    public function changeFreq()
-    {
-        return $this->getChangeFreq();
-    }
-
-    /**
      * Set the change frequency.
      *
      * @param  string  $changeFreq
@@ -171,18 +135,6 @@ class Url extends Fluent implements UrlContract
     public function getPriority()
     {
         return $this->get('priority');
-    }
-
-    /**
-     * Get the priority (alias).
-     *
-     * @see getPriority()
-     *
-     * @return float
-     */
-    public function priority()
-    {
-        return $this->getPriority();
     }
 
     /**
@@ -253,6 +205,18 @@ class Url extends Fluent implements UrlContract
     }
 
     /**
+     * Check if has an attribute.
+     *
+     * @param  string  $key
+     *
+     * @return bool
+     */
+    public function has($key)
+    {
+        return ! is_null($this->get($key));
+    }
+
+    /**
      * Convert the Fluent instance to an array.
      *
      * @return array
@@ -282,18 +246,6 @@ class Url extends Fluent implements UrlContract
         $this->attributes[$key] = $value;
 
         return $this;
-    }
-
-    /**
-     * Check if has an attribute.
-     *
-     * @param  string  $key
-     *
-     * @return bool
-     */
-    protected function has($key)
-    {
-        return ! is_null($this->get($key));
     }
 
     /**

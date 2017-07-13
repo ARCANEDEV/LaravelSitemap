@@ -26,15 +26,6 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
     public function getLoc();
 
     /**
-     * Get the url location (alias).
-     *
-     * @see getLoc()
-     *
-     * @return string
-     */
-    public function loc();
-
-    /**
      * Set the url location.
      *
      * @param  string  $loc
@@ -49,15 +40,6 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      * @return \DateTimeInterface
      */
     public function getLastMod();
-
-    /**
-     * Get the last modification date (alias).
-     *
-     * @see getLastMod()
-     *
-     * @return \DateTimeInterface
-     */
-    public function lastMod();
 
     /**
      * Format the url last modification.
@@ -86,15 +68,6 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
     public function getChangeFreq();
 
     /**
-     * Get the change frequency (alias).
-     *
-     * @see getChangeFreq()
-     *
-     * @return string
-     */
-    public function changeFreq();
-
-    /**
      * Set the change frequency.
      *
      * @param  string  $changeFreq
@@ -109,15 +82,6 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      * @return float
      */
     public function getPriority();
-
-    /**
-     * Get the priority (alias).
-     *
-     * @see getPriority()
-     *
-     * @return float
-     */
-    public function priority();
 
     /**
      * Set the priority.
@@ -166,4 +130,13 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      * @return \Arcanedev\LaravelSitemap\Entities\Url
      */
     public static function makeFromArray(array $attributes);
+
+    /**
+     * Check if has an attribute.
+     *
+     * @param  string  $key
+     *
+     * @return bool
+     */
+    public function has($key);
 }

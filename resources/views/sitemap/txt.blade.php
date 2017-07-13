@@ -5,5 +5,5 @@
  */
 ?>
 @foreach($sitemap->getUrls() as $url)
-{{ $url->loc() }}
+{{ $url->getLoc() }}
 @endforeach
