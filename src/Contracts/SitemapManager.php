@@ -1,225 +1,32 @@
 <?php namespace Arcanedev\LaravelSitemap\Contracts;
 
+use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap;
+use Countable;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+use JsonSerializable;
+
 /**
  * Interface  SitemapManager
  *
  * @package   Arcanedev\LaravelSitemap\Contracts
  * @author    ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-interface SitemapManager
+interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializable
 {
     /* -----------------------------------------------------------------
-     |  Getter and Setters
+     |  Getters & Setters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get all sitemaps.
+     * Set the format.
      *
-     * @return array
-     */
-    public function getSitemaps();
-
-    /**
-     * Add a sitemap to the sitemap container.
-     *
-     * @param  array  $sitemap
+     * @param  string  $format
      *
      * @return self
      */
-    public function setSitemap(array $sitemap);
-
-    /**
-     * Get the sitemap items.
-     *
-     * @return \Arcanedev\LaravelSitemap\Entities\SitemapItemCollection
-     */
-    public function getItems();
-
-    /**
-     * Get the title.
-     *
-     * @return string
-     */
-    public function getTitle();
-
-    /**
-     * Set the title.
-     *
-     * @param  string  $title
-     *
-     * @return self
-     */
-    public function setTitle($title);
-
-    /**
-     * Get the link.
-     *
-     * @return string
-     */
-    public function getLink();
-
-    /**
-     * Sets $link value.
-     *
-     * @param  string  $link
-     *
-     * @return self
-     */
-    public function setLink($link);
-
-    /**
-     * Get the sitemap styles location.
-     *
-     * @return string
-     */
-    public function getStyleLocation();
-
-    /**
-     * Set the sitemap styles location.
-     *
-     * @param  string  $location
-     *
-     * @return self
-     */
-    public function setStyleLocation($location);
-
-    /**
-     * Get the escaping value.
-     *
-     * @return bool
-     */
-    public function isEscaped();
-
-    /**
-     * Set the escaping value.
-     *
-     * @param  bool  $escape
-     *
-     * @return self
-     */
-    public function setEscaping($escape);
-
-    /**
-     * Checks if content is cached
-     *
-     * @return bool
-     */
-    public function isCached();
-
-    /**
-     * Get the max size value.
-     *
-     * @return int
-     */
-    public function getMaxSize();
-
-    /**
-     * Set the max size value.
-     *
-     * @param  int  $maxSize
-     *
-     * @return self
-     */
-    public function setMaxSize($maxSize);
-
-    /**
-     * Set cache options
-     *
-     * @param  string|null                        $key
-     * @param  \Carbon\Carbon|\Datetime|int|null  $duration
-     * @param  bool                               $useCache
-     */
-    public function setCache($key = null, $duration = null, $useCache = true);
-
-    /**
-     * Get the cache enabled value.
-     *
-     * @return bool
-     */
-    public function isCacheEnabled();
-
-    /**
-     * Set the cache enabled value.
-     *
-     * @param  bool  $cacheEnabled
-     *
-     * @return self
-     */
-    public function setCacheEnabled($cacheEnabled);
-
-    /**
-     * Get the cache key value.
-     *
-     * @return string
-     */
-    public function getCacheKey();
-
-    /**
-     * Set the cache key value.
-     *
-     * @param  string  $key
-     *
-     * @return self
-     */
-    public function setCacheKey($key);
-
-    /**
-     * Get the cache duration value.
-     *
-     * @return int
-     */
-    public function getCacheDuration();
-
-    /**
-     * Set cache duration value.
-     *
-     * @param  int  $duration
-     *
-     * @return self
-     */
-    public function setCacheDuration($duration);
-
-    /**
-     * Get the use limit size value.
-     *
-     * @return bool
-     */
-    public function getUseLimitSize();
-
-    /**
-     * Set the use limit size value.
-     *
-     * @param  bool  $useLimitSize
-     *
-     * @return self
-     */
-    public function setUseLimitSize($useLimitSize);
-
-    /**
-     * Limit size of $items array to 50000 elements (1000 for google-news).
-     *
-     * @param  int  $max
-     *
-     * @return self
-     */
-    public function limitSize($max = 50000);
-
-    /**
-     * Get the use styles value.
-     *
-     * @return bool
-     */
-    public function getUseStyles();
-
-    /**
-     * Set the use styles value.
-     *
-     * @param  bool  $useStyles
-     *
-     * @return self
-     */
-    public function setUseStyles($useStyles);
+    public function format($format);
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -227,93 +34,76 @@ interface SitemapManager
      */
 
     /**
-     * Add new sitemap item to $items array.
+     * Create and add a sitemap to the collection.
      *
-     * @param  string       $loc
-     * @param  string|null  $lastmod
-     * @param  string|null  $priority
-     * @param  string|null  $freq
-     * @param  array        $images
-     * @param  string|null  $title
-     * @param  array        $translations
-     * @param  array        $videos
-     * @param  array        $googlenews
-     * @param  array        $alternates
+     * @param  string    $name
+     * @param  callable  $callback
+     *
+     * @return self
      */
-    public function add(
-        $loc, $lastmod = null, $priority = null, $freq = null, $images = [], $title = null,
-        $translations = [], $videos = [], $googlenews = [], $alternates = []
-    );
+    public function create($name, callable $callback);
 
     /**
-     * Add new sitemap one or multiple items to $items array.
+     * Add a sitemap to the collection.
      *
-     * @param  array  $params
+     * @param  string                                                $name
+     * @param  \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap  $sitemap
+     *
+     * @return self
      */
-    public function addItem($params = []);
+    public function add($name, Sitemap $sitemap);
 
     /**
-     * Add multiple sitemap items.
+     * Get the sitemaps collection.
      *
-     * @param  array  $items
+     * @return \Illuminate\Support\Collection
      */
-    public function addItems(array $items);
+    public function all();
 
     /**
-     * Add new sitemap to $sitemaps array.
+     * Get a sitemap instance.
      *
-     * @param  string       $loc
-     * @param  string|null  $lastmod
+     * @param  string      $name
+     * @param  mixed|null  $default
+     *
+     * @return \Arcanedev\LaravelSitemap\Entities\Sitemap|null
      */
-    public function addSitemap($loc, $lastmod = null);
+    public function get($name, $default = null);
 
     /**
-     * Returns document with all sitemap items from $items array.
+     * Check if a sitemap exists.
      *
-     * @param  string  $format  (options: xml, html, txt, ror-rss, ror-rdf, google-news)
-     * @param  string  $style   (path to custom xls style like '/styles/xsl/xml-sitemap.xsl')
-     *
-     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Contracts\Routing\ResponseFactory|array
-     */
-    public function render($format = 'xml', $style = null);
-
-    /**
-     * Generates document with all sitemap items from $items array.
-     *
-     * @param  string       $format  (options: xml, html, txt, ror-rss, ror-rdf, sitemapindex, google-news)
-     * @param  string|null  $style   (path to custom xls style like '/styles/xsl/xml-sitemap.xsl')
-     *
-     * @return array
-     */
-    public function generate($format = 'xml', $style = null);
-
-    /**
-     * Generate sitemap and store it to a file.
-     *
-     * @param  string  $format    (options: xml, html, txt, ror-rss, ror-rdf, sitemapindex, google-news)
-     * @param  string  $filename  (without file extension, may be a path like 'sitemaps/sitemap1' but must exist)
-     * @param  string  $path      (path to store sitemap like '/www/site/public')
-     * @param  string  $style     (path to custom xls style like '/styles/xsl/xml-sitemap.xsl')
+     * @param  string  $name
      *
      * @return bool
      */
-    public function store($format = 'xml', $filename = 'sitemap', $path = null, $style = null);
+    public function has($name);
 
     /**
-     * Reset the sitemaps container.
+     * Remove a sitemap from the collection by key.
      *
-     * @param  array  $sitemaps
+     * @param  string|array  $names
      *
      * @return self
      */
-    public function resetSitemaps(array $sitemaps = []);
+    public function forget($names);
 
     /**
-     * Reset the items array.
+     * Render the sitemaps.
      *
-     * @param  array  $items
+     * @param  string|null  $name
+     *
+     * @return string|null
+     */
+    public function render($name = null);
+
+    /**
+     * Save the sitemaps.
+     *
+     * @param  string       $path
+     * @param  string|null  $name
      *
      * @return self
      */
-    public function resetItems(array $items = []);
+    public function save($path, $name = null);
 }

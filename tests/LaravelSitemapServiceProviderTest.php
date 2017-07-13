@@ -1,7 +1,5 @@
 <?php namespace Arcanedev\LaravelSitemap\Tests;
 
-use Arcanedev\LaravelSitemap\LaravelSitemapServiceProvider;
-
 /**
  * Class     LaravelSitemapServiceProviderTest
  *
@@ -10,35 +8,38 @@ use Arcanedev\LaravelSitemap\LaravelSitemapServiceProvider;
  */
 class LaravelSitemapServiceProviderTest extends TestCase
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /** @var  \Arcanedev\LaravelSitemap\LaravelSitemapServiceProvider */
     private $provider;
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
-    public function setUp()
+
+    protected function setUp()
     {
         parent::setUp();
 
-        $this->provider = $this->app->getProvider(LaravelSitemapServiceProvider::class);
+        $this->provider = $this->app->getProvider(\Arcanedev\LaravelSitemap\LaravelSitemapServiceProvider::class);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->provider);
 
         parent::tearDown();
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Test Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Tests
+     | -----------------------------------------------------------------
      */
+
     /** @test */
     public function it_can_be_instantiated()
     {
@@ -59,10 +60,8 @@ class LaravelSitemapServiceProviderTest extends TestCase
     {
         $expected = [
             \Arcanedev\LaravelSitemap\Contracts\SitemapManager::class,
-            \Arcanedev\LaravelSitemap\Contracts\SitemapStyler::class,
-            \Arcanedev\LaravelSitemap\Contracts\SitemapGenerator::class,
         ];
 
-        $this->assertEquals($expected, $this->provider->provides());
+        $this->assertSame($expected, $this->provider->provides());
     }
 }

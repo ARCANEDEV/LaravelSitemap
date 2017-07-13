@@ -1,6 +1,6 @@
 <?php namespace Arcanedev\LaravelSitemap;
 
-use Arcanedev\Support\PackageServiceProvider as ServiceProvider;
+use Arcanedev\Support\PackageServiceProvider;
 
 /**
  * Class     LaravelSitemapServiceProvider
@@ -8,7 +8,7 @@ use Arcanedev\Support\PackageServiceProvider as ServiceProvider;
  * @package  Arcanedev\LaravelSitemap
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class LaravelSitemapServiceProvider extends ServiceProvider
+class LaravelSitemapServiceProvider extends PackageServiceProvider
 {
     /* -----------------------------------------------------------------
      |  Properties
@@ -27,7 +27,7 @@ class LaravelSitemapServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer   = true;
+    protected $defer = true;
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -42,10 +42,10 @@ class LaravelSitemapServiceProvider extends ServiceProvider
         parent::register();
 
         $this->registerConfig();
-        $this->registerSitemapStyler();
-        $this->registerSitemapGenerator();
-        $this->registerSitemapManager();
+
+        $this->singleton(Contracts\SitemapManager::class, SitemapManager::class);
     }
+
 
     /**
      * Boot the service provider.
@@ -57,10 +57,6 @@ class LaravelSitemapServiceProvider extends ServiceProvider
         $this->publishConfig();
         $this->publishViews();
         $this->publishTranslations();
-
-        $this->publishes([
-            $this->getBasePath().'/public' => public_path(Helpers\SitemapStyler::VENDOR_PATH)
-        ], 'public');
     }
 
     /**
@@ -72,55 +68,6 @@ class LaravelSitemapServiceProvider extends ServiceProvider
     {
         return [
             Contracts\SitemapManager::class,
-            Contracts\SitemapStyler::class,
-            Contracts\SitemapGenerator::class,
         ];
-    }
-
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Register the sitemap styler.
-     */
-    private function registerSitemapStyler()
-    {
-        $this->bind(Contracts\SitemapStyler::class, Helpers\SitemapStyler::class);
-    }
-
-    /**
-     * Register the sitemap generator.
-     */
-    private function registerSitemapGenerator()
-    {
-        $this->bind(Contracts\SitemapGenerator::class, Helpers\SitemapGenerator::class);
-    }
-
-    /**
-     * Register the sitemap manager.
-     */
-    private function registerSitemapManager()
-    {
-        $this->bind(Contracts\SitemapManager::class, function ($app) {
-            /**
-             * @var  \Illuminate\Contracts\Config\Repository               $config
-             * @var  \Illuminate\Contracts\Cache\Factory                   $cache
-             * @var  \Illuminate\Filesystem\Filesystem                     $filesystem
-             * @var  \Arcanedev\LaravelSitemap\Contracts\SitemapGenerator  $generator
-             */
-            $cache      = $app['cache'];
-            $config     = $app['config'];
-            $filesystem = $app['files'];
-            $generator  = $app[Contracts\SitemapGenerator::class];
-
-            return new SitemapManager(
-                $cache->store(),
-                $config,
-                $filesystem,
-                $generator
-            );
-        });
     }
 }
