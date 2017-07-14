@@ -4,6 +4,7 @@ use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap as SitemapContract;
 use Arcanedev\LaravelSitemap\Contracts\SitemapManager as SitemapManagerContract;
 use Arcanedev\LaravelSitemap\Entities\Sitemap;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * Class     SitemapManager
@@ -121,7 +122,17 @@ class SitemapManager implements SitemapManagerContract
      */
     public function has($name)
     {
-        return $this->sitemaps->has($name);
+        if ( ! Str::contains($name, '.'))
+            return $this->sitemaps->has($name);
+
+        list($name, $key) = explode('.', $name, 2);
+
+        /** @var  \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap|null  $map */
+        $map = $this->sitemaps->filter(function (Sitemap $map) use ($name) {
+            return $map->isExceeded();
+        })->get($name);
+
+        return is_null($map) ? false : $map->chunk()->has(intval($key));
     }
 
     /**

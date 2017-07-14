@@ -282,9 +282,11 @@ class SitemapManagerTest extends TestCase
         $this->assertMatchesSnapshot($this->manager->render('blog'));
 
         foreach (range(1, 5) as $index) {
+            $this->assertTrue($this->manager->has("blog.$index"), "Issue with the index: $index");
             $this->assertMatchesSnapshot($this->manager->render("blog.$index"));
         }
 
+        $this->assertFalse($this->manager->has('blog.6'));
         $this->assertNull($this->manager->render('blog.6'));
     }
 
