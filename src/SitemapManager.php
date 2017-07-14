@@ -72,7 +72,7 @@ class SitemapManager implements SitemapManagerContract
      */
     public function create($name, callable $callback)
     {
-        return $this->add($name, tap((new Sitemap)->setPath($name), $callback));
+        return $this->add($name, tap(Sitemap::make()->setPath($name), $callback));
     }
 
     /**
@@ -127,8 +127,7 @@ class SitemapManager implements SitemapManagerContract
 
         list($name, $key) = explode('.', $name, 2);
 
-        /** @var  \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap|null  $map */
-        $map = $this->sitemaps->filter(function (Sitemap $map) use ($name) {
+        $map = $this->sitemaps->filter(function (SitemapContract $map) use ($name) {
             return $map->isExceeded();
         })->get($name);
 

@@ -73,6 +73,27 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
+    public function it_can_make()
+    {
+        $map = Sitemap::make();
+
+        $expectations = [
+            \Countable::class,
+            \JsonSerializable::class,
+            \Illuminate\Contracts\Support\Arrayable::class,
+            \Illuminate\Contracts\Support\Jsonable::class,
+            \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap::class,
+            \Arcanedev\LaravelSitemap\Entities\Sitemap::class,
+        ];
+
+        foreach ($expectations as $expected) {
+            $this->assertInstanceOf($expected, $map);
+        }
+
+        $this->assertSame(0, $map->count());
+    }
+
+    /** @test */
     public function it_can_add_url_to_the_collection()
     {
         $this->assertSame(0, $this->sitemap->count());

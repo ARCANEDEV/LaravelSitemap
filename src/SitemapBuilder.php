@@ -107,7 +107,7 @@ class SitemapBuilder
      */
     protected function render($format, $type, array $data)
     {
-        switch ($format) {
+        switch ($format= strtolower(trim($format))) {
             case 'xml':
             case 'rss':
                 return static::renderXml($format, $type, $data);
