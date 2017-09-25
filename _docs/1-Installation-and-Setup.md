@@ -15,16 +15,16 @@ The Laravel Sitemap package has a few system requirements:
 
 ## Version Compatibility
 
-| Laravel Sitemap                              | Laravel                      |
-|:---------------------------------------------|:-----------------------------|
-| ![Laravel Sitemap v1.x][laravel_sitemap_1_x] | ![Laravel v5.4][laravel_5_4] |
-| ![Laravel Sitemap v2.x][laravel_sitemap_2_x] | ![Laravel v5.5][laravel_5_5] |
+| Laravel Sitemap                                  | Laravel                      |
+|:-------------------------------------------------|:-----------------------------|
+| ![Laravel Sitemap v1.0.x][laravel_sitemap_1_0_x] | ![Laravel v5.4][laravel_5_4] |
+| ![Laravel Sitemap v1.1.x][laravel_sitemap_1_1_x] | ![Laravel v5.5][laravel_5_5] |
 
 [laravel_5_4]:  https://img.shields.io/badge/v5.4-supported-brightgreen.svg?style=flat-square "Laravel v5.4"
 [laravel_5_5]:  https://img.shields.io/badge/v5.5-supported-brightgreen.svg?style=flat-square "Laravel v5.5"
 
-[laravel_sitemap_1_x]: https://img.shields.io/badge/version-1.*-blue.svg?style=flat-square "Laravel Sitemap v1.*"
-[laravel_sitemap_2_x]: https://img.shields.io/badge/version-2.*-blue.svg?style=flat-square "Laravel Sitemap v2.*"
+[laravel_sitemap_1_0_x]: https://img.shields.io/badge/version-1.0.*-blue.svg?style=flat-square "Laravel Sitemap v1.0.*"
+[laravel_sitemap_1_1_x]: https://img.shields.io/badge/version-1.1.*-blue.svg?style=flat-square "Laravel Sitemap v1.1.*"
 
 ## Composer
 
