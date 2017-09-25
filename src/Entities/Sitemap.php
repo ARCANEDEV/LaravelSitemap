@@ -37,7 +37,7 @@ class Sitemap implements SitemapContract
     }
 
     /* -----------------------------------------------------------------
-     |  Main Methods
+     |  Getters & Setters
      | -----------------------------------------------------------------
      */
 
@@ -89,6 +89,21 @@ class Sitemap implements SitemapContract
         return $this;
     }
 
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Make a sitemap instance.
+     *
+     * @return self
+     */
+    public static function make()
+    {
+        return new static();
+    }
+
     /**
      * Get a URL instance by its loc.
      *
@@ -125,7 +140,9 @@ class Sitemap implements SitemapContract
      */
     public function addMany($urls)
     {
-        foreach ($urls as $url) { $this->add($url); }
+        foreach ($urls as $url) {
+            $this->add($url);
+        }
 
         return $this;
     }
@@ -208,7 +225,7 @@ class Sitemap implements SitemapContract
     }
 
     /**
-     * Chunk the sitemap to multiple chunks.
+     * Chunk the sitemap to multiple chunks if the size is exceeded.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -228,6 +245,11 @@ class Sitemap implements SitemapContract
      | -----------------------------------------------------------------
      */
 
+    /**
+     * Get the max size.
+     *
+     * @return int
+     */
     protected function getMaxSize()
     {
         return config('sitemap.urls-max-size', 50000);

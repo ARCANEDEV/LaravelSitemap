@@ -108,6 +108,26 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      */
     public function setTitle($title);
 
+    /**
+     * Get an attribute from the container.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     *
+     * @return mixed
+     */
+    public function get($key, $default = null);
+
+    /**
+     * Set an attribute into the container.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     *
+     * @return self
+     */
+    public function set($key, $value);
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------

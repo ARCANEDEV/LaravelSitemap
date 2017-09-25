@@ -15,7 +15,7 @@ use JsonSerializable;
 interface Sitemap extends Arrayable, Countable, Jsonable, JsonSerializable
 {
     /* -----------------------------------------------------------------
-     |  Main Methods
+     |  Getters & Setters
      | -----------------------------------------------------------------
      */
 
@@ -50,6 +50,18 @@ interface Sitemap extends Arrayable, Countable, Jsonable, JsonSerializable
      * @return self
      */
     public function setUrls(Collection $urls);
+
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Make a sitemap instance.
+     *
+     * @return self
+     */
+    public static function make();
 
     /**
      * Get a URL instance by its loc.
@@ -106,7 +118,7 @@ interface Sitemap extends Arrayable, Countable, Jsonable, JsonSerializable
     public function isExceeded();
 
     /**
-     * Chunk the sitemap to multiple chunks.
+     * Chunk the sitemap to multiple chunks if the size is exceeded.
      *
      * @return \Illuminate\Support\Collection
      */

@@ -264,4 +264,43 @@ class UrlTest extends TestCase
     {
         Url::make($this->baseUrl)->setPriority('2.0');
     }
+
+    /** @test */
+    public function it_can_manipulate_extra_attributes()
+    {
+        $url = Url::makeFromArray([
+            'loc'        => 'http://example.com',
+            'lastmod'    => \Carbon\Carbon::create(2017, 01, 01, 00, 00, 00),
+            'changefreq' => ChangeFrequency::DAILY,
+            'priority'   => 1.0,
+            'title'      => 'Hello world',
+            'foo'        => 'bar',
+        ]);
+
+        $expected = [
+            'loc'        => 'http://example.com',
+            'lastmod'    => '2017-01-01T00:00:00+00:00',
+            'changefreq' => 'daily',
+            'priority'   => 1.0,
+            'title'      => 'Hello world',
+            'foo'        => 'bar',
+        ];
+
+        $this->assertSame($expected, $url->toArray());
+
+        $this->assertTrue($url->has('foo'));
+        $this->assertSame('bar', $url->get('foo'));
+
+        $url->set('foo', 'baz');
+        $expected['foo'] = 'baz';
+
+        $this->assertSame($expected, $url->toArray());
+
+        unset($url['foo'], $expected['foo']);
+
+        $this->assertFalse($url->has('foo'));
+        $this->assertNull($url->get('foo'));
+
+        $this->assertSame($expected, $url->toArray());
+    }
 }

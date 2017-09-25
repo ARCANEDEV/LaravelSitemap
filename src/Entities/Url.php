@@ -175,6 +175,21 @@ class Url extends Fluent implements UrlContract
         return $this->set('title', $title);
     }
 
+    /**
+     * Set an attribute.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     *
+     * @return self
+     */
+    public function set($key, $value)
+    {
+        $this->attributes[$key] = $value;
+
+        return $this;
+    }
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -232,21 +247,6 @@ class Url extends Fluent implements UrlContract
      |  Other Methods
      | -----------------------------------------------------------------
      */
-
-    /**
-     * Set an attribute.
-     *
-     * @param  string  $key
-     * @param  mixed   $value
-     *
-     * @return self
-     */
-    protected function set($key, $value)
-    {
-        $this->attributes[$key] = $value;
-
-        return $this;
-    }
 
     /**
      * Escape the given value.
