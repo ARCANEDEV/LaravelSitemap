@@ -80,41 +80,50 @@ abstract class TestCase extends BaseTestCase
      | -----------------------------------------------------------------
      */
 
+    /**
+     * @return \Arcanedev\LaravelSitemap\Entities\Sitemap
+     */
     protected function createPagesSitemap()
     {
-        $baseUrl = 'http://example.com';
-        $lastMod = '2017-01-01 00:00:00';
+        return tap(new Sitemap, function (Sitemap $sitemap) {
+            $baseUrl = 'http://example.com';
+            $lastMod = '2017-01-01 00:00:00';
 
-        return (new Sitemap)
-            ->setPath("{$baseUrl}/sitemap-pages.xml")
-            ->add(Url::make("{$baseUrl}/")->setLastMod($lastMod))
-            ->add(Url::make("{$baseUrl}/about-us")->setLastMod($lastMod))
-            ->add(Url::make("{$baseUrl}/contact")->setLastMod($lastMod));
+            $sitemap->setPath("{$baseUrl}/sitemap-pages.xml");
+            $sitemap->add(Url::make("{$baseUrl}/")->setLastMod($lastMod));
+            $sitemap->add(Url::make("{$baseUrl}/about-us")->setLastMod($lastMod));
+            $sitemap->add(Url::make("{$baseUrl}/contact")->setLastMod($lastMod));
+        });
     }
 
+    /**
+     * @param  int  $times
+     *
+     * @return \Arcanedev\LaravelSitemap\Entities\Sitemap
+     */
     protected function createBlogSitemap($times = 10)
     {
-        $baseUrl = 'http://example.com';
-        $lastMod = '2017-01-02 00:00:00';
-        $sitemap = (new Sitemap)
-            ->setPath("{$baseUrl}/sitemap-blog.xml")
-            ->create("{$baseUrl}/blog", function (Url $url) use ($lastMod) {
+        return tap(new Sitemap, function (Sitemap $sitemap) use ($times) {
+            $baseUrl = 'http://example.com';
+            $lastMod = '2017-01-02 00:00:00';
+
+            $sitemap->setPath("{$baseUrl}/sitemap-blog.xml");
+            $sitemap->create("{$baseUrl}/blog", function (Url $url) use ($lastMod) {
                 $url->setTitle('Blog page')
                     ->setChangeFreq(ChangeFrequency::WEEKLY)
                     ->setPriority(.7)
                     ->setLastMod($lastMod);
             });
 
-        foreach (range(1, $times) as $i) {
-            $sitemap->add(
-                Url::make("{$baseUrl}/blog/posts/post-{$i}")
-                   ->setTitle("Blog / Post {$i}")
-                   ->setChangeFreq(ChangeFrequency::MONTHLY)
-                   ->setPriority(.5)
-                   ->setLastMod($lastMod)
-            );
-        }
-
-        return $sitemap;
+            foreach (range(1, $times) as $i) {
+                $sitemap->add(
+                    Url::make("{$baseUrl}/blog/posts/post-{$i}")
+                       ->setTitle("Blog / Post {$i}")
+                       ->setChangeFreq(ChangeFrequency::MONTHLY)
+                       ->setPriority(.5)
+                       ->setLastMod($lastMod)
+                );
+            }
+        });
     }
 }

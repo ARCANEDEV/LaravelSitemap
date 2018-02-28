@@ -60,15 +60,15 @@ class SitemapManagerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->manager);
+            static::assertInstanceOf($expected, $this->manager);
         }
     }
 
     /** @test */
     public function it_should_return_empty_sitemaps_collection_on_creation()
     {
-        $this->assertCount(0, $this->manager->all());
-        $this->assertSame(0, $this->manager->count());
+        static::assertCount(0, $this->manager->all());
+        static::assertSame(0, $this->manager->count());
     }
 
     /** @test */
@@ -76,10 +76,10 @@ class SitemapManagerTest extends TestCase
     {
         $this->manager->add('pages', $sitemap = new Sitemap);
 
-        $this->assertSame(1, $this->manager->count());
-        $this->assertCount(1, $sitemaps = $this->manager->all());
+        static::assertSame(1, $this->manager->count());
+        static::assertCount(1, $sitemaps = $this->manager->all());
 
-        $this->assertSame($sitemap, $sitemaps->first());
+        static::assertSame($sitemap, $sitemaps->first());
     }
 
     /** @test */
@@ -87,12 +87,12 @@ class SitemapManagerTest extends TestCase
     {
         $this->manager->add('blog', $sitemap = new Sitemap);
 
-        $this->assertSame(1, $this->manager->count());
-        $this->assertCount(1, $sitemaps = $this->manager->all());
+        static::assertSame(1, $this->manager->count());
+        static::assertCount(1, $sitemaps = $this->manager->all());
 
         $sitemap = $this->manager->get('blog');
 
-        $this->assertInstanceOf(\Arcanedev\LaravelSitemap\Entities\Sitemap::class, $sitemap);
+        static::assertInstanceOf(\Arcanedev\LaravelSitemap\Entities\Sitemap::class, $sitemap);
     }
 
     /** @test */
@@ -104,10 +104,10 @@ class SitemapManagerTest extends TestCase
 
         $sitemap = $this->manager->get('pages');
 
-        $this->assertSame(1, $sitemap->count());
+        static::assertSame(1, $sitemap->count());
 
-        $this->assertTrue($sitemap->has('http://example.com'));
-        $this->assertFalse($sitemap->has('http://example.com/blog'));
+        static::assertTrue($sitemap->has('http://example.com'));
+        static::assertFalse($sitemap->has('http://example.com/blog'));
     }
 
     /** @test */
@@ -115,9 +115,9 @@ class SitemapManagerTest extends TestCase
     {
         $this->populatedManager();
 
-        $this->assertCount(2, $this->manager);
-        $this->assertTrue($this->manager->has('pages'));
-        $this->assertTrue($this->manager->has('blog'));
+        static::assertCount(2, $this->manager);
+        static::assertTrue($this->manager->has('pages'));
+        static::assertTrue($this->manager->has('blog'));
 
         $this->manager->forget('blog');
     }
@@ -125,17 +125,17 @@ class SitemapManagerTest extends TestCase
     /** @test */
     public function it_can_convert_to_array()
     {
-        $this->assertSame([], $this->manager->toArray());
+        static::assertSame([], $this->manager->toArray());
 
         $this->populatedManager();
 
         $result = $this->manager->toArray();
 
-        $this->assertArrayHasKeys(['pages', 'blog'], $result);
+        static::assertArrayHasKeys(['pages', 'blog'], $result);
 
         foreach ($result as $sitemapUrls) {
             foreach ($sitemapUrls as $url) {
-                $this->assertArrayHasKeys(['loc', 'lastmod', 'changefreq', 'priority'], $url);
+                static::assertArrayHasKeys(['loc', 'lastmod', 'changefreq', 'priority'], $url);
             }
         }
     }
@@ -145,15 +145,15 @@ class SitemapManagerTest extends TestCase
     {
         $expected = '[]';
 
-        $this->assertSame($expected, json_encode($this->manager));
-        $this->assertSame($expected, $this->manager->toJson());
+        static::assertSame($expected, json_encode($this->manager));
+        static::assertSame($expected, $this->manager->toJson());
 
         $this->populatedManager();
 
         $expected = json_encode($this->manager->toArray());
 
-        $this->assertSame($expected, json_encode($this->manager));
-        $this->assertSame($expected, $this->manager->toJson());
+        static::assertSame($expected, json_encode($this->manager));
+        static::assertSame($expected, $this->manager->toJson());
     }
 
 
@@ -162,17 +162,17 @@ class SitemapManagerTest extends TestCase
     {
         $this->populatedManager();
 
-        $this->assertMatchesXmlSnapshot($this->manager->render());
-        $this->assertMatchesXmlSnapshot($this->manager->render('pages'));
-        $this->assertMatchesXmlSnapshot($this->manager->render('blog'));
+        static::assertMatchesXmlSnapshot($this->manager->render());
+        static::assertMatchesXmlSnapshot($this->manager->render('pages'));
+        static::assertMatchesXmlSnapshot($this->manager->render('blog'));
 
-        $this->assertNull($this->manager->render('admin')); // Not available
+        static::assertNull($this->manager->render('admin')); // Not available
     }
 
     /** @test */
     public function it_should_return_null_when_rendering_an_empty_manager()
     {
-        $this->assertNull($this->manager->render());
+        static::assertNull($this->manager->render());
     }
 
     /** @test */
@@ -181,14 +181,14 @@ class SitemapManagerTest extends TestCase
         $directory = __DIR__.'/__temp__';
         $this->manager->save($path = "$directory/sitemap.xml");
 
-        $this->assertFileNotExists($path);
+        static::assertFileNotExists($path);
 
         $this->populatedManager();
 
         $this->manager->save($path);
 
-        $this->assertFileExists($path);
-        $this->assertXmlStringEqualsXmlFile($path, $this->manager->render());
+        static::assertFileExists($path);
+        static::assertXmlStringEqualsXmlFile($path, $this->manager->render());
 
         unlink($path);
     }
@@ -199,14 +199,14 @@ class SitemapManagerTest extends TestCase
         $directory = __DIR__.'/__temp__';
 
         foreach (['pages', 'blog'] as $name) {
-            $this->assertFileNotExists($path = "{$directory}/sitemap-{$name}.xml");
+            static::assertFileNotExists($path = "{$directory}/sitemap-{$name}.xml");
 
             $this->populatedManager();
 
             $this->manager->save($path, $name);
 
-            $this->assertFileExists($path);
-            $this->assertXmlStringEqualsXmlFile($path, $this->manager->render($name));
+            static::assertFileExists($path);
+            static::assertXmlStringEqualsXmlFile($path, $this->manager->render($name));
 
             unlink($path); // Delete the saved file
         }
@@ -222,8 +222,8 @@ class SitemapManagerTest extends TestCase
 
         $this->manager->save($path);
 
-        $this->assertFileExists($path);
-        $this->assertXmlStringEqualsXmlFile($path, $this->manager->render('pages'));
+        static::assertFileExists($path);
+        static::assertXmlStringEqualsXmlFile($path, $this->manager->render('pages'));
 
         unlink($path); // Delete the saved file
     }
@@ -233,15 +233,15 @@ class SitemapManagerTest extends TestCase
     {
         $this->manager->format('txt');
 
-        $this->assertNull($this->manager->render());
-        $this->assertNull($this->manager->render('pages'));
-        $this->assertNull($this->manager->render('blog'));
+        static::assertNull($this->manager->render());
+        static::assertNull($this->manager->render('pages'));
+        static::assertNull($this->manager->render('blog'));
 
         $this->populatedManager();
 
-        $this->assertMatchesSnapshot($this->manager->render());
-        $this->assertMatchesSnapshot($this->manager->render('pages'));
-        $this->assertMatchesSnapshot($this->manager->render('blog'));
+        static::assertMatchesSnapshot($this->manager->render());
+        static::assertMatchesSnapshot($this->manager->render('pages'));
+        static::assertMatchesSnapshot($this->manager->render('blog'));
     }
 
     /** @test */
@@ -249,15 +249,15 @@ class SitemapManagerTest extends TestCase
     {
         $this->manager->format('rss');
 
-        $this->assertNull($this->manager->render());
-        $this->assertNull($this->manager->render('pages'));
-        $this->assertNull($this->manager->render('blog'));
+        static::assertNull($this->manager->render());
+        static::assertNull($this->manager->render('pages'));
+        static::assertNull($this->manager->render('blog'));
 
         $this->populatedManager();
 
-        $this->assertMatchesXmlSnapshot($this->manager->render());
-        $this->assertMatchesXmlSnapshot($this->manager->render('pages'));
-        $this->assertMatchesXmlSnapshot($this->manager->render('blog'));
+        static::assertMatchesXmlSnapshot($this->manager->render());
+        static::assertMatchesXmlSnapshot($this->manager->render('pages'));
+        static::assertMatchesXmlSnapshot($this->manager->render('blog'));
     }
 
     /** @test */
@@ -267,9 +267,9 @@ class SitemapManagerTest extends TestCase
 
         $this->manager->format('php');
 
-        $this->assertNull($this->manager->render());
-        $this->assertNull($this->manager->render('pages'));
-        $this->assertNull($this->manager->render('blog'));
+        static::assertNull($this->manager->render());
+        static::assertNull($this->manager->render('pages'));
+        static::assertNull($this->manager->render('blog'));
     }
 
     /** @test */
@@ -279,15 +279,15 @@ class SitemapManagerTest extends TestCase
 
         $this->manager->format('txt');
 
-        $this->assertMatchesSnapshot($this->manager->render('blog'));
+        static::assertMatchesSnapshot($this->manager->render('blog'));
 
         foreach (range(1, 5) as $index) {
-            $this->assertTrue($this->manager->has("blog.$index"), "Issue with the index: $index");
-            $this->assertMatchesSnapshot($this->manager->render("blog.$index"));
+            static::assertTrue($this->manager->has("blog.$index"), "Issue with the index: $index");
+            static::assertMatchesSnapshot($this->manager->render("blog.$index"));
         }
 
-        $this->assertFalse($this->manager->has('blog.6'));
-        $this->assertNull($this->manager->render('blog.6'));
+        static::assertFalse($this->manager->has('blog.6'));
+        static::assertNull($this->manager->render('blog.6'));
     }
 
     /** @test */
@@ -309,7 +309,7 @@ class SitemapManagerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertFileExists($expected);
+            static::assertFileExists($expected);
 
             unlink($expected); // Delete the file
         }
@@ -320,31 +320,31 @@ class SitemapManagerTest extends TestCase
     {
         $response = $this->manager->respond();
 
-        $this->assertInstanceOf(\Illuminate\Http\Response::class, $response);
+        static::assertInstanceOf(\Illuminate\Http\Response::class, $response);
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('', $response->getContent());
-        $this->assertSame('application/xml', $response->headers->get('content-type'));
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('', $response->getContent());
+        static::assertSame('application/xml', $response->headers->get('content-type'));
 
         $this->populatedManager();
 
         $response = $this->manager->respond();
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesXmlSnapshot($response->getContent());
-        $this->assertSame('application/xml', $response->headers->get('content-type'));
+        static::assertSame(200, $response->getStatusCode());
+        static::assertMatchesXmlSnapshot($response->getContent());
+        static::assertSame('application/xml', $response->headers->get('content-type'));
 
         $response = $this->manager->format('txt')->respond();
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesSnapshot($response->getContent());
-        $this->assertSame('text/plain', $response->headers->get('content-type'));
+        static::assertSame(200, $response->getStatusCode());
+        static::assertMatchesSnapshot($response->getContent());
+        static::assertSame('text/plain', $response->headers->get('content-type'));
 
         $response = $this->manager->format('rss')->respond('blog');
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesSnapshot($response->getContent());
-        $this->assertSame('application/rss+xml', $response->headers->get('content-type'));
+        static::assertSame(200, $response->getStatusCode());
+        static::assertMatchesSnapshot($response->getContent());
+        static::assertSame('application/rss+xml', $response->headers->get('content-type'));
     }
 
     /* -----------------------------------------------------------------

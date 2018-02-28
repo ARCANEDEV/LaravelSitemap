@@ -55,7 +55,7 @@ class UrlTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->url);
+            static::assertInstanceOf($expected, $this->url);
         }
     }
 
@@ -78,18 +78,18 @@ class UrlTest extends TestCase
             'priority'   => 1.0,
         ];
 
-        $this->assertSame($expected, $this->url->toArray());
+        static::assertSame($expected, $this->url->toArray());
     }
 
     /** @test */
     public function it_can_make()
     {
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             \Arcanedev\LaravelSitemap\Entities\Url::class,
             $url = Url::make($loc = 'http://example.com')
         );
 
-        $this->assertSame($loc, $url->getLoc());
+        static::assertSame($loc, $url->getLoc());
     }
 
     /** @test */
@@ -97,7 +97,7 @@ class UrlTest extends TestCase
     {
         $url = Url::makeFromArray(['loc' => 'http://example.com']); // With minimal attributes
 
-        $this->assertInstanceOf(\Arcanedev\LaravelSitemap\Entities\Url::class, $url);
+        static::assertInstanceOf(\Arcanedev\LaravelSitemap\Entities\Url::class, $url);
 
         $expected = [
             'loc'        => 'http://example.com',
@@ -107,7 +107,7 @@ class UrlTest extends TestCase
             'title'      => null,
         ];
 
-        $this->assertSame($expected, $url->toArray());
+        static::assertSame($expected, $url->toArray());
 
         $now = new \DateTime();
         $url = Url::makeFromArray([
@@ -126,62 +126,62 @@ class UrlTest extends TestCase
             'priority'   => 0.5,
         ];
 
-        $this->assertSame($expected, $url->toArray());
+        static::assertSame($expected, $url->toArray());
     }
 
     /** @test */
     public function it_can_get_and_set_location()
     {
-        $this->assertSame('http://example.com', $this->url->getLoc());
+        static::assertSame('http://example.com', $this->url->getLoc());
 
         $this->url->setLoc($loc = 'http://example.com/contact');
 
-        $this->assertSame($loc, $this->url->getLoc());
+        static::assertSame($loc, $this->url->getLoc());
     }
 
     /** @test */
     public function it_can_get_and_set_last_modification_date()
     {
-        $this->assertInstanceOf(\DateTime::class, $this->url->getLastMod());
-        $this->assertSame(date('Y-m-d H:i'), $this->url->getLastMod()->format('Y-m-d H:i'));
+        static::assertInstanceOf(\DateTime::class, $this->url->getLastMod());
+        static::assertSame(date('Y-m-d H:i'), $this->url->getLastMod()->format('Y-m-d H:i'));
 
         $this->url->setLastMod($date = '2017-01-01 00:00:00'); // String date
 
-        $this->assertSame($date, $this->url->getLastMod()->format('Y-m-d H:i:s'));
+        static::assertSame($date, $this->url->getLastMod()->format('Y-m-d H:i:s'));
 
         $this->url->setLastMod($date = new \DateTime);
 
-        $this->assertSame($date, $this->url->getLastMod());
+        static::assertSame($date, $this->url->getLastMod());
     }
 
     /** @test */
     public function it_can_get_and_set_change_freq()
     {
-        $this->assertSame(ChangeFrequency::DAILY, $this->url->getChangeFreq());
+        static::assertSame(ChangeFrequency::DAILY, $this->url->getChangeFreq());
 
         $this->url->setChangeFreq($changeFreq = ChangeFrequency::WEEKLY);
 
-        $this->assertSame($changeFreq, $this->url->getChangeFreq());
+        static::assertSame($changeFreq, $this->url->getChangeFreq());
     }
 
     /** @test */
     public function it_can_get_and_set_priority()
     {
-        $this->assertSame(0.8, $this->url->getPriority());
+        static::assertSame(0.8, $this->url->getPriority());
 
         $this->url->setPriority($priority = 1.0);
 
-        $this->assertSame($priority, $this->url->getPriority());
+        static::assertSame($priority, $this->url->getPriority());
     }
 
     /** @test */
     public function it_can_get_and_set_title()
     {
-        $this->assertNull($this->url->getTitle());
+        static::assertNull($this->url->getTitle());
 
         $this->url->setTitle($title = 'Example - Homepage');
 
-        $this->assertSame($title, $this->url->getTitle());
+        static::assertSame($title, $this->url->getTitle());
     }
 
     /** @test */
@@ -197,7 +197,7 @@ class UrlTest extends TestCase
             'title'      => null,
         ];
 
-        $this->assertSame($expected, $array = $this->url->toArray());
+        static::assertSame($expected, $array = $this->url->toArray());
     }
 
     /** @test */
@@ -207,8 +207,8 @@ class UrlTest extends TestCase
 
         $expected = json_encode($this->url->toArray());
 
-        $this->assertSame($expected, json_encode($this->url));
-        $this->assertSame($expected, $this->url->toJson());
+        static::assertSame($expected, json_encode($this->url));
+        static::assertSame($expected, $this->url->toJson());
     }
 
     /** @test */
@@ -217,8 +217,8 @@ class UrlTest extends TestCase
         $url = Url::make('http://www.example.com/ümlat.php&q=name')
             ->setTitle('<hello type="shout">world</hello>');
 
-        $this->assertSame('http://www.example.com/ümlat.php&amp;q=name', $url->getLoc());
-        $this->assertSame('&lt;hello type="shout"&gt;world&lt;/hello&gt;', $url->getTitle());
+        static::assertSame('http://www.example.com/ümlat.php&amp;q=name', $url->getLoc());
+        static::assertSame('&lt;hello type="shout"&gt;world&lt;/hello&gt;', $url->getTitle());
     }
 
     /**
@@ -286,21 +286,21 @@ class UrlTest extends TestCase
             'foo'        => 'bar',
         ];
 
-        $this->assertSame($expected, $url->toArray());
+        static::assertSame($expected, $url->toArray());
 
-        $this->assertTrue($url->has('foo'));
-        $this->assertSame('bar', $url->get('foo'));
+        static::assertTrue($url->has('foo'));
+        static::assertSame('bar', $url->get('foo'));
 
         $url->set('foo', 'baz');
         $expected['foo'] = 'baz';
 
-        $this->assertSame($expected, $url->toArray());
+        static::assertSame($expected, $url->toArray());
 
         unset($url['foo'], $expected['foo']);
 
-        $this->assertFalse($url->has('foo'));
-        $this->assertNull($url->get('foo'));
+        static::assertFalse($url->has('foo'));
+        static::assertNull($url->get('foo'));
 
-        $this->assertSame($expected, $url->toArray());
+        static::assertSame($expected, $url->toArray());
     }
 }

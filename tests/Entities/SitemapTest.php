@@ -66,10 +66,10 @@ class SitemapTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->sitemap);
+            static::assertInstanceOf($expected, $this->sitemap);
         }
 
-        $this->assertSame(0, $this->sitemap->count());
+        static::assertSame(0, $this->sitemap->count());
     }
 
     /** @test */
@@ -87,26 +87,26 @@ class SitemapTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $map);
+            static::assertInstanceOf($expected, $map);
         }
 
-        $this->assertSame(0, $map->count());
+        static::assertSame(0, $map->count());
     }
 
     /** @test */
     public function it_can_add_url_to_the_collection()
     {
-        $this->assertSame(0, $this->sitemap->count());
+        static::assertSame(0, $this->sitemap->count());
 
         $this->sitemap->add($this->createUrlSample());
 
-        $this->assertSame(1, $this->sitemap->count());
+        static::assertSame(1, $this->sitemap->count());
     }
 
     /** @test */
     public function it_can_create_and_add_url_to_collection()
     {
-        $this->assertSame(0, $this->sitemap->count());
+        static::assertSame(0, $this->sitemap->count());
 
         $this->sitemap->create('http://example.com', function (Url $url) {
             $url->setChangeFreq(ChangeFrequency::ALWAYS)
@@ -115,16 +115,16 @@ class SitemapTest extends TestCase
                 ->setTitle('Example - Homepage');
         });
 
-        $this->assertSame(1, $this->sitemap->count());
+        static::assertSame(1, $this->sitemap->count());
 
         /** @var \Arcanedev\LaravelSitemap\Entities\Url $url */
         $url = $this->sitemap->getUrls()->last();
 
-        $this->assertSame('http://example.com', $url->getLoc());
-        $this->assertSame(ChangeFrequency::ALWAYS, $url->getChangeFreq());
-        $this->assertSame(1.0, $url->getPriority());
-        $this->assertSame('2017-01-01 00:00:00', $url->getLastMod()->format('Y-m-d H:i:s'));
-        $this->assertSame('Example - Homepage', $url->getTitle());
+        static::assertSame('http://example.com', $url->getLoc());
+        static::assertSame(ChangeFrequency::ALWAYS, $url->getChangeFreq());
+        static::assertSame(1.0, $url->getPriority());
+        static::assertSame('2017-01-01 00:00:00', $url->getLastMod()->format('Y-m-d H:i:s'));
+        static::assertSame('Example - Homepage', $url->getTitle());
     }
 
     /** @test */
@@ -132,11 +132,11 @@ class SitemapTest extends TestCase
     {
         $url = $this->createUrlSample();
 
-        $this->assertFalse($this->sitemap->has($url->getLoc()));
+        static::assertFalse($this->sitemap->has($url->getLoc()));
 
         $this->sitemap->add($url);
 
-        $this->assertTrue($this->sitemap->has($url->getLoc()));
+        static::assertTrue($this->sitemap->has($url->getLoc()));
     }
 
     /** @test */
@@ -144,17 +144,17 @@ class SitemapTest extends TestCase
     {
         $url = $this->createUrlSample();
 
-        $this->assertNull($this->sitemap->getUrl($url->getLoc()));
+        static::assertNull($this->sitemap->getUrl($url->getLoc()));
 
         $this->sitemap->add($url);
 
-        $this->assertSame($url, $this->sitemap->getUrl($url->getLoc()));
+        static::assertSame($url, $this->sitemap->getUrl($url->getLoc()));
     }
 
     /** @test */
     public function it_can_convert_to_array()
     {
-        $this->assertSame([], $this->sitemap->toArray());
+        static::assertSame([], $this->sitemap->toArray());
 
         $this->sitemap->add($this->createUrlSample());
 
@@ -168,7 +168,7 @@ class SitemapTest extends TestCase
             ]
         ];
 
-        $this->assertSame($expected, $this->sitemap->toArray());
+        static::assertSame($expected, $this->sitemap->toArray());
     }
 
     /** @test */
@@ -176,15 +176,15 @@ class SitemapTest extends TestCase
     {
         $expected = '[]';
 
-        $this->assertSame($expected, json_encode($this->sitemap));
-        $this->assertSame($expected, $this->sitemap->toJson());
+        static::assertSame($expected, json_encode($this->sitemap));
+        static::assertSame($expected, $this->sitemap->toJson());
 
         $this->sitemap->add($this->createUrlSample());
 
         $expected = json_encode($this->sitemap->toArray());
 
-        $this->assertSame($expected, json_encode($this->sitemap));
-        $this->assertSame($expected, $this->sitemap->toJson());
+        static::assertSame($expected, json_encode($this->sitemap));
+        static::assertSame($expected, $this->sitemap->toJson());
     }
 
     /** @test */
@@ -192,7 +192,7 @@ class SitemapTest extends TestCase
     {
         $this->sitemap = $this->createBlogSitemap();
 
-        $this->assertMatchesSnapshot(
+        static::assertMatchesSnapshot(
             $this->sitemap->getUrls()->pluck('title', 'loc')->toArray()
         );
     }
@@ -204,18 +204,18 @@ class SitemapTest extends TestCase
 
         $sitemap = $this->createBlogSitemap();
 
-        $this->assertSame(11, $sitemap->count());
-        $this->assertFalse($this->createBlogSitemap()->isExceeded());
+        static::assertSame(11, $sitemap->count());
+        static::assertFalse($this->createBlogSitemap()->isExceeded());
 
         $sitemap = $this->createBlogSitemap(498);
 
-        $this->assertSame(499, $sitemap->count()); // 1 blog index + 498 posts = 499 urls
-        $this->assertTrue($sitemap->isExceeded());
+        static::assertSame(499, $sitemap->count()); // 1 blog index + 498 posts = 499 urls
+        static::assertTrue($sitemap->isExceeded());
 
         $sitemap = $this->createBlogSitemap(499);
 
-        $this->assertSame(500, $sitemap->count()); // 1 blog index + 499 posts = 500 urls
-        $this->assertTrue($sitemap->isExceeded());
+        static::assertSame(500, $sitemap->count()); // 1 blog index + 499 posts = 500 urls
+        static::assertTrue($sitemap->isExceeded());
     }
 
     /** @test */
@@ -223,7 +223,7 @@ class SitemapTest extends TestCase
     {
         $this->sitemap->add($this->createUrlSample());
 
-        $this->assertSame(1, $this->sitemap->count());
+        static::assertSame(1, $this->sitemap->count());
 
         $urls = collect([
             ['loc' => 'http://example.com'],
@@ -237,7 +237,7 @@ class SitemapTest extends TestCase
             return Url::makeFromArray($item)->setLastMod($now);
         }));
 
-        $this->assertSame(3, $this->sitemap->count());
+        static::assertSame(3, $this->sitemap->count());
 
         $formattedDate = $now->format(\DateTime::ATOM);
 
@@ -263,7 +263,7 @@ class SitemapTest extends TestCase
             ],
         ];
 
-        $this->assertSame($expected, $this->sitemap->toArray());
+        static::assertSame($expected, $this->sitemap->toArray());
     }
 
     /** @test */
@@ -271,7 +271,7 @@ class SitemapTest extends TestCase
     {
         $this->sitemap->add($this->createUrlSample());
 
-        $this->assertSame(1, $this->sitemap->count());
+        static::assertSame(1, $this->sitemap->count());
 
         $urls = collect([
             ['loc' => 'http://example.com/news'],
@@ -285,7 +285,7 @@ class SitemapTest extends TestCase
             return Url::makeFromArray($item)->setLastMod($now);
         }));
 
-        $this->assertSame(4, $this->sitemap->count());
+        static::assertSame(4, $this->sitemap->count());
 
         $formattedDate = $now->format(\DateTime::ATOM);
 
@@ -317,7 +317,7 @@ class SitemapTest extends TestCase
             ],
         ];
 
-        $this->assertSame($expected, $this->sitemap->toArray());
+        static::assertSame($expected, $this->sitemap->toArray());
     }
 
     /* -----------------------------------------------------------------

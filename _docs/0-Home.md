@@ -18,4 +18,3 @@ This package allows you to manage and generate a sitemap without you having to a
   1. [Installation and Setup](1-Installation-and-Setup.md)
   2. [Configuration](2-Configuration.md)
   3. [Usage](3-Usage.md)
-  4. [FAQ](4-FAQ.md)
