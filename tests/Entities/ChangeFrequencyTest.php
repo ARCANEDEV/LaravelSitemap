@@ -22,7 +22,7 @@ class ChangeFrequencyTest extends TestCase
     {
         $frequencies = ChangeFrequency::keys();
 
-        $this->assertInstanceOf(Collection::class, $frequencies);
+        static::assertInstanceOf(Collection::class, $frequencies);
 
         $expected = [
             ChangeFrequency::ALWAYS,
@@ -34,7 +34,7 @@ class ChangeFrequencyTest extends TestCase
             ChangeFrequency::NEVER,
         ];
 
-        $this->assertSame($expected, $frequencies->toArray());
+        static::assertSame($expected, $frequencies->toArray());
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class ChangeFrequencyTest extends TestCase
     {
         $frequencies = ChangeFrequency::all();
 
-        $this->assertInstanceOf(Collection::class, $frequencies);
+        static::assertInstanceOf(Collection::class, $frequencies);
 
         $expected = [
             'always'  => 'Always',
@@ -54,7 +54,7 @@ class ChangeFrequencyTest extends TestCase
             'never'   => 'Never',
         ];
 
-        $this->assertSame($expected, $frequencies->toArray());
+        static::assertSame($expected, $frequencies->toArray());
     }
 
     /** @test */
@@ -62,7 +62,7 @@ class ChangeFrequencyTest extends TestCase
     {
         $frequencies = ChangeFrequency::all('fr');
 
-        $this->assertInstanceOf(Collection::class, $frequencies);
+        static::assertInstanceOf(Collection::class, $frequencies);
 
         $expected = [
             'always'  => 'Toujours',
@@ -74,7 +74,7 @@ class ChangeFrequencyTest extends TestCase
             'never'   => 'Jamais',
         ];
 
-        $this->assertSame($expected, $frequencies->toArray());
+        static::assertSame($expected, $frequencies->toArray());
     }
 
     /** @test */
@@ -82,27 +82,27 @@ class ChangeFrequencyTest extends TestCase
     {
         $key = ChangeFrequency::ALWAYS;
 
-        $this->assertSame('Always', ChangeFrequency::get($key));
+        static::assertSame('Always', ChangeFrequency::get($key));
 
         // With invalid key
-        $this->assertNull(ChangeFrequency::get('infinity'));
-        $this->assertSame('Fallback', ChangeFrequency::get('infinity', 'Fallback'));
+        static::assertNull(ChangeFrequency::get('infinity'));
+        static::assertSame('Fallback', ChangeFrequency::get('infinity', 'Fallback'));
 
         // With locale
-        $this->assertSame('Always', ChangeFrequency::get($key, null, 'en'));
-        $this->assertSame('Toujours', ChangeFrequency::get($key, null, 'fr'));
+        static::assertSame('Always', ChangeFrequency::get($key, null, 'en'));
+        static::assertSame('Toujours', ChangeFrequency::get($key, null, 'fr'));
 
         // With invalid locale
-        $this->assertSame('Always', ChangeFrequency::get($key, null, 'ar'));
+        static::assertSame('Always', ChangeFrequency::get($key, null, 'ar'));
     }
 
     /** @test */
     public function it_can_check_if_frequency_exists()
     {
         foreach (ChangeFrequency::keys() as $key) {
-            $this->assertTrue(ChangeFrequency::has($key));
+            static::assertTrue(ChangeFrequency::has($key));
         }
 
-        $this->assertFalse(ChangeFrequency::has('infinity'));
+        static::assertFalse(ChangeFrequency::has('infinity'));
     }
 }

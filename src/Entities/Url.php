@@ -59,8 +59,6 @@ class Url extends Fluent implements UrlContract
      * @param  string  $loc
      *
      * @return self
-     *
-     * @throws \Arcanedev\LaravelSitemap\Exceptions\SitemapException
      */
     public function setLoc($loc)
     {
@@ -143,8 +141,6 @@ class Url extends Fluent implements UrlContract
      * @param  float  $priority
      *
      * @return self
-     *
-     * @throws \Arcanedev\LaravelSitemap\Exceptions\SitemapException
      */
     public function setPriority($priority)
     {

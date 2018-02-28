@@ -51,7 +51,7 @@ class LaravelSitemapServiceProviderTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->provider);
+            static::assertInstanceOf($expected, $this->provider);
         }
     }
 
@@ -62,6 +62,6 @@ class LaravelSitemapServiceProviderTest extends TestCase
             \Arcanedev\LaravelSitemap\Contracts\SitemapManager::class,
         ];
 
-        $this->assertSame($expected, $this->provider->provides());
+        static::assertSame($expected, $this->provider->provides());
     }
 }
