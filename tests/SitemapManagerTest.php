@@ -32,14 +32,14 @@ class SitemapManagerTest extends TestCase
      | -----------------------------------------------------------------
      */
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->manager = $this->app->make(\Arcanedev\LaravelSitemap\Contracts\SitemapManager::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->manager);
 
