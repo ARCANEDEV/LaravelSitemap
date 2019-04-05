@@ -25,14 +25,14 @@ class UrlTest extends TestCase
      | -----------------------------------------------------------------
      */
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->url = new Url('http://example.com');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->url);
 
@@ -221,47 +221,39 @@ class UrlTest extends TestCase
         static::assertSame('&lt;hello type="shout"&gt;world&lt;/hello&gt;', $url->getTitle());
     }
 
-    /**
-     * @test
-     *
-     * @expectedException         \Arcanedev\LaravelSitemap\Exceptions\SitemapException
-     * @expectedExceptionMessage  The [loc] attribute is required and must be string value.
-     */
+    /** @test */
     public function it_must_fail_if_loc_is_invalid_1()
     {
+        $this->expectException(\Arcanedev\LaravelSitemap\Exceptions\SitemapException::class);
+        $this->expectExceptionMessage('The [loc] attribute is required and must be string value.');
+
         Url::make(null);
     }
 
-    /**
-     * @test
-     *
-     * @expectedException         \Arcanedev\LaravelSitemap\Exceptions\SitemapException
-     * @expectedExceptionMessage  The [loc] attribute is required and must be string value.
-     */
+    /** @test */
     public function it_must_fail_if_loc_is_invalid_2()
     {
+        $this->expectException(\Arcanedev\LaravelSitemap\Exceptions\SitemapException::class);
+        $this->expectExceptionMessage('The [loc] attribute is required and must be string value.');
+
         Url::make(true);
     }
 
-    /**
-     * @test
-     *
-     * @expectedException         \Arcanedev\LaravelSitemap\Exceptions\SitemapException
-     * @expectedExceptionMessage  The [priority] value must be numeric.
-     */
+    /** @test */
     public function it_must_fail_if_priority_is_invalid_1()
     {
+        $this->expectException(\Arcanedev\LaravelSitemap\Exceptions\SitemapException::class);
+        $this->expectExceptionMessage('The [priority] value must be numeric.');
+
         Url::make($this->baseUrl)->setPriority('foo');
     }
 
-    /**
-     * @test
-     *
-     * @expectedException         \Arcanedev\LaravelSitemap\Exceptions\SitemapException
-     * @expectedExceptionMessage  The [priority] value must be between `0.0` and `1.0`, `2` was given.
-     */
+    /** @test */
     public function it_must_fail_if_priority_is_invalid_2()
     {
+        $this->expectException(\Arcanedev\LaravelSitemap\Exceptions\SitemapException::class);
+        $this->expectExceptionMessage('The [priority] value must be between `0.0` and `1.0`, `2` was given.');
+
         Url::make($this->baseUrl)->setPriority('2.0');
     }
 

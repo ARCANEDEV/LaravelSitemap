@@ -5,7 +5,7 @@ This package allows you to manage and generate a sitemap without you having to a
 ### Features
 
   * Easy setup & configuration.
-  * Laravel `5.4` to `5.7` are supported.
+  * Laravel `5.4` to `5.8` are supported.
   * SEO-Friendly (Search engine optimization).
   * Respects the [sitemaps.org](https://www.sitemaps.org/protocol.html) schemas.
   * Multiple URLs & Sitemaps management.

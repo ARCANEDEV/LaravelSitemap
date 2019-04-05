@@ -3,6 +3,7 @@
 use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap as SitemapContract;
 use Arcanedev\LaravelSitemap\Contracts\SitemapManager as SitemapManagerContract;
 use Arcanedev\LaravelSitemap\Entities\Sitemap;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -276,7 +277,7 @@ class SitemapManager implements SitemapManagerContract
      */
     protected function getResponseHeaders()
     {
-        return array_get([
+        return Arr::get([
             'xml' => ['Content-Type' => 'application/xml'],
             'rss' => ['Content-Type' => 'application/rss+xml'],
             'txt' => ['Content-Type' => 'text/plain'],

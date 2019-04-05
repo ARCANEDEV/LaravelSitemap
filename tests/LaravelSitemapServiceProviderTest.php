@@ -21,14 +21,14 @@ class LaravelSitemapServiceProviderTest extends TestCase
      | -----------------------------------------------------------------
      */
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->provider = $this->app->getProvider(\Arcanedev\LaravelSitemap\LaravelSitemapServiceProvider::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->provider);
 
