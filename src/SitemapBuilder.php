@@ -1,12 +1,14 @@
 <?php namespace Arcanedev\LaravelSitemap;
 
+use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap;
 use DOMDocument;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
  * Class     SitemapBuilder
  *
- * @package  Arcanedev\LaravelSitemap\Tests
+ * @package  Arcanedev\LaravelSitemap
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class SitemapBuilder
@@ -19,7 +21,7 @@ class SitemapBuilder
     /**
      * Create the builder instance.
      *
-     * @return self
+     * @return \Arcanedev\LaravelSitemap\SitemapBuilder
      */
     public static function make()
     {
@@ -33,9 +35,11 @@ class SitemapBuilder
      * @param  \Illuminate\Support\Collection  $sitemaps
      * @param  string                          $format
      *
+     * @throws \Throwable
+     *
      * @return string|null
      */
-    public function build($name, $sitemaps, $format)
+    public function build($name, Collection $sitemaps, $format)
     {
         if ($sitemaps->isEmpty())
             return null;
@@ -46,7 +50,9 @@ class SitemapBuilder
                 : static::renderSitemap($format, $sitemaps->first());
         }
 
-        list($name, $key) = Str::contains($name, '.') ? explode('.', $name, 2) : [$name, null];
+        list($name, $key) = Str::contains($name, '.')
+            ? explode('.', $name, 2)
+            : [$name, null];
 
         if ($sitemaps->has($name))
             return static::renderSitemap($format, $sitemaps->get($name), $key);
@@ -66,9 +72,11 @@ class SitemapBuilder
      * @param  \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap|null  $sitemap
      * @param  string|null                                                $key
      *
+     * @throws \Throwable
+     *
      * @return string|null
      */
-    protected function renderSitemap($format, $sitemap, $key = null)
+    protected function renderSitemap($format, Sitemap $sitemap = null, $key = null)
     {
         if (is_null($sitemap))
             return null;
@@ -89,7 +97,9 @@ class SitemapBuilder
      * @param  string                          $format
      * @param  \Illuminate\Support\Collection  $sitemaps
      *
-     * @return null|string
+     * @throws \Throwable
+     *
+     * @return string|null
      */
     protected function renderSitemapIndex($format, $sitemaps)
     {
@@ -103,7 +113,9 @@ class SitemapBuilder
      * @param  string  $type
      * @param  array   $data
      *
-     * @return null|string
+     * @throws \Throwable
+     *
+     * @return string|null
      */
     protected function render($format, $type, array $data)
     {
@@ -146,6 +158,8 @@ class SitemapBuilder
      * @param  string  $type
      * @param  string  $format
      * @param  array   $data
+     *
+     * @throws \Throwable
      *
      * @return string
      */

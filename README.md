@@ -19,7 +19,7 @@ This package allows you to manage and generate a sitemap without you having to a
   * Easy setup &amp; configuration.
   * Well documented &amp; IDE Friendly.
   * Well tested with maximum code quality.
-  * Laravel `5.4 | 5.5 | 5.6` are supported.
+  * Laravel `5.4` to `5.6` are supported.
   * Made with :heart: &amp; :coffee:.
   
 ## Table of contents

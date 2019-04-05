@@ -127,11 +127,13 @@ class SitemapManager implements SitemapManagerContract
 
         list($name, $key) = explode('.', $name, 2);
 
-        $map = $this->sitemaps->filter(function (SitemapContract $map) use ($name) {
+        $map = $this->sitemaps->filter(function (SitemapContract $map) {
             return $map->isExceeded();
         })->get($name);
 
-        return is_null($map) ? false : $map->chunk()->has(intval($key));
+        return is_null($map)
+            ? false
+            : $map->chunk()->has(intval($key));
     }
 
     /**
@@ -163,6 +165,8 @@ class SitemapManager implements SitemapManagerContract
      *
      * @param  string  $name
      *
+     * @throws \Throwable
+     *
      * @return string|null
      */
     public function render($name = null)
@@ -175,6 +179,8 @@ class SitemapManager implements SitemapManagerContract
      *
      * @param  string       $path
      * @param  string|null  $name
+     *
+     * @throws \Throwable
      *
      * @return self
      */
@@ -200,6 +206,8 @@ class SitemapManager implements SitemapManagerContract
      * @param  string  $name
      * @param  int     $status
      * @param  array   $headers
+     *
+     * @throws \Throwable
      *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
@@ -245,6 +253,8 @@ class SitemapManager implements SitemapManagerContract
      *
      * @param  string                                                $path
      * @param  \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap  $sitemap
+     *
+     * @throws \Throwable
      */
     private function saveMultiple($path, $sitemap)
     {
