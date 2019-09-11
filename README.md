@@ -1,4 +1,4 @@
-# Laravel Sitemap [![Packagist License][badge_license]](LICENSE.md) [![For Laravel 5][badge_laravel]][link-github-repo]
+# Laravel Sitemap [![Packagist License][badge_license]](LICENSE.md) [![For Laravel][badge_laravel]][link-github-repo]
 
 [![Travis Status][badge_build]][link-travis]
 [![Coverage Status][badge_coverage]][link-scrutinizer]
@@ -19,7 +19,7 @@ This package allows you to manage and generate a sitemap without you having to a
   * Easy setup &amp; configuration.
   * Well documented &amp; IDE Friendly.
   * Well tested with maximum code quality.
-  * Laravel `5.4` to `5.8` are supported.
+  * Laravel `5.4` to `6.0` are supported.
   * Made with :heart: &amp; :coffee:.
   
 ## Table of contents
@@ -41,7 +41,7 @@ If you discover any security related issues, please email arcanedev.maroc@gmail.
 - [ARCANEDEV][link-author]
 - [All Contributors][link-contributors]
 
-[badge_laravel]:      https://img.shields.io/badge/Laravel-5.4%20to%205.8-orange.svg?style=flat-square
+[badge_laravel]:      https://img.shields.io/badge/Laravel-5.4%20to%206.0-orange.svg?style=flat-square
 [badge_license]:      https://img.shields.io/packagist/l/arcanedev/laravel-sitemap.svg?style=flat-square
 [badge_build]:        https://img.shields.io/travis/ARCANEDEV/LaravelSitemap.svg?style=flat-square
 [badge_coverage]:     https://img.shields.io/scrutinizer/coverage/g/ARCANEDEV/LaravelSitemap.svg?style=flat-square
