@@ -17,13 +17,13 @@
         "php":               ">=7.2.0",
         "ext-dom":           "*",
         "ext-json":          "*",
-        "arcanedev/support": "~5.0.0"
+        "arcanedev/support": "^5.0"
     },
     "require-dev": {
-        "orchestra/testbench":                "~4.0.0",
-        "phpunit/phpcov":                     "~6.0",
-        "phpunit/phpunit":                    "~8.0",
-        "spatie/phpunit-snapshot-assertions": "~2.1"
+        "orchestra/testbench":                "^4.0",
+        "phpunit/phpcov":                     "^6.0",
+        "phpunit/phpunit":                    "^8.0",
+        "spatie/phpunit-snapshot-assertions": "^2.1"
     },
     "autoload": {
         "psr-4": {

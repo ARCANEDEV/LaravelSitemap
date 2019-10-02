@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelSitemap;
 
-use Arcanedev\Support\PackageServiceProvider;
+use Arcanedev\Support\Providers\PackageServiceProvider;
+use Illuminate\Contracts\Support\DeferrableProvider;
 
 /**
  * Class     LaravelSitemapServiceProvider
@@ -8,7 +9,7 @@ use Arcanedev\Support\PackageServiceProvider;
  * @package  Arcanedev\LaravelSitemap
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class LaravelSitemapServiceProvider extends PackageServiceProvider
+class LaravelSitemapServiceProvider extends PackageServiceProvider implements DeferrableProvider
 {
     /* -----------------------------------------------------------------
      |  Properties
@@ -22,13 +23,6 @@ class LaravelSitemapServiceProvider extends PackageServiceProvider
      */
     protected $package = 'sitemap';
 
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -37,7 +31,7 @@ class LaravelSitemapServiceProvider extends PackageServiceProvider
     /**
      * Register the service provider.
      */
-    public function register()
+    public function register(): void
     {
         parent::register();
 
@@ -50,10 +44,8 @@ class LaravelSitemapServiceProvider extends PackageServiceProvider
     /**
      * Boot the service provider.
      */
-    public function boot()
+    public function boot(): void
     {
-        parent::boot();
-
         $this->publishConfig();
         $this->publishViews();
         $this->publishTranslations();
@@ -64,7 +56,7 @@ class LaravelSitemapServiceProvider extends PackageServiceProvider
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             Contracts\SitemapManager::class,
