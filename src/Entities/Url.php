@@ -3,8 +3,7 @@
 use Arcanedev\LaravelSitemap\Contracts\Entities\Url as UrlContract;
 use Arcanedev\LaravelSitemap\Exceptions\SitemapException;
 use DateTime;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Fluent;
+use Illuminate\Support\{Arr, Fluent};
 
 /**
  * Class     Url

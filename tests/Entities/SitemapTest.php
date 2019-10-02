@@ -1,8 +1,7 @@
 <?php namespace Arcanedev\LaravelSitemap\Tests\Entities;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\ChangeFrequency;
-use Arcanedev\LaravelSitemap\Entities\Sitemap;
-use Arcanedev\LaravelSitemap\Entities\Url;
+use Arcanedev\LaravelSitemap\Entities\{Sitemap, Url};
 use Arcanedev\LaravelSitemap\Tests\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 

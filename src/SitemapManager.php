@@ -3,9 +3,7 @@
 use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap as SitemapContract;
 use Arcanedev\LaravelSitemap\Contracts\SitemapManager as SitemapManagerContract;
 use Arcanedev\LaravelSitemap\Entities\Sitemap;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Illuminate\Support\{Arr, Collection, Str};
 
 /**
  * Class     SitemapManager
