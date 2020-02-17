@@ -1,8 +1,17 @@
-<?php namespace Arcanedev\LaravelSitemap\Tests\Entities;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Tests\Entities;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\ChangeFrequency;
 use Arcanedev\LaravelSitemap\Entities\Url;
+use Arcanedev\LaravelSitemap\Exceptions\SitemapException;
 use Arcanedev\LaravelSitemap\Tests\TestCase;
+use Carbon\Carbon;
+use Illuminate\Contracts\Support\{Arrayable, Jsonable};
+use DateTime;
+use JsonSerializable;
 
 /**
  * Class     UrlTest
@@ -45,13 +54,13 @@ class UrlTest extends TestCase
      */
 
     /** @test */
-    public function it_can_be_instantiated()
+    public function it_can_be_instantiated(): void
     {
         $expectations = [
-            \JsonSerializable::class,
-            \Illuminate\Contracts\Support\Arrayable::class,
-            \Illuminate\Contracts\Support\Jsonable::class,
-            \Arcanedev\LaravelSitemap\Entities\Url::class,
+            JsonSerializable::class,
+            Arrayable::class,
+            Jsonable::class,
+            Url::class,
         ];
 
         foreach ($expectations as $expected) {
@@ -60,12 +69,12 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_can_also_instantiate_with_array()
+    public function it_can_also_instantiate_with_array(): void
     {
         $this->url = new Url([
             'title'      => 'Home page',
             'loc'        => 'http://example.com',
-            'lastmod'    => $now = new \DateTime,
+            'lastmod'    => $now = new DateTime,
             'changefreq' => 'hourly',
             'priority'   => 1.0,
         ]);
@@ -73,7 +82,7 @@ class UrlTest extends TestCase
         $expected = [
             'title'      => 'Home page',
             'loc'        => 'http://example.com',
-            'lastmod'    => $now->format(\DateTime::ATOM),
+            'lastmod'    => $now->format(DateTime::ATOM),
             'changefreq' => 'hourly',
             'priority'   => 1.0,
         ];
@@ -82,10 +91,10 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_can_make()
+    public function it_can_make(): void
     {
         static::assertInstanceOf(
-            \Arcanedev\LaravelSitemap\Entities\Url::class,
+            Url::class,
             $url = Url::make($loc = 'http://example.com')
         );
 
@@ -93,11 +102,11 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_can_make_from_array()
+    public function it_can_make_from_array(): void
     {
         $url = Url::makeFromArray(['loc' => 'http://example.com']); // With minimal attributes
 
-        static::assertInstanceOf(\Arcanedev\LaravelSitemap\Entities\Url::class, $url);
+        static::assertInstanceOf(Url::class, $url);
 
         $expected = [
             'loc'        => 'http://example.com',
@@ -109,7 +118,7 @@ class UrlTest extends TestCase
 
         static::assertSame($expected, $url->toArray());
 
-        $now = new \DateTime();
+        $now = new DateTime();
         $url = Url::makeFromArray([
             'title'      => 'Contact Page',
             'loc'        => 'http://example.com/contact',
@@ -121,7 +130,7 @@ class UrlTest extends TestCase
         $expected = [
             'title'      => 'Contact Page',
             'loc'        => 'http://example.com/contact',
-            'lastmod'    => $now->format(\DateTime::ATOM),
+            'lastmod'    => $now->format(DateTime::ATOM),
             'changefreq' => 'monthly',
             'priority'   => 0.5,
         ];
@@ -130,7 +139,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_and_set_location()
+    public function it_can_get_and_set_location(): void
     {
         static::assertSame('http://example.com', $this->url->getLoc());
 
@@ -140,22 +149,22 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_and_set_last_modification_date()
+    public function it_can_get_and_set_last_modification_date(): void
     {
-        static::assertInstanceOf(\DateTime::class, $this->url->getLastMod());
+        static::assertInstanceOf(DateTime::class, $this->url->getLastMod());
         static::assertSame(date('Y-m-d H:i'), $this->url->getLastMod()->format('Y-m-d H:i'));
 
         $this->url->setLastMod($date = '2017-01-01 00:00:00'); // String date
 
         static::assertSame($date, $this->url->getLastMod()->format('Y-m-d H:i:s'));
 
-        $this->url->setLastMod($date = new \DateTime);
+        $this->url->setLastMod($date = new DateTime);
 
         static::assertSame($date, $this->url->getLastMod());
     }
 
     /** @test */
-    public function it_can_get_and_set_change_freq()
+    public function it_can_get_and_set_change_freq(): void
     {
         static::assertSame(ChangeFrequency::DAILY, $this->url->getChangeFreq());
 
@@ -165,7 +174,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_and_set_priority()
+    public function it_can_get_and_set_priority(): void
     {
         static::assertSame(0.8, $this->url->getPriority());
 
@@ -175,7 +184,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_and_set_title()
+    public function it_can_get_and_set_title(): void
     {
         static::assertNull($this->url->getTitle());
 
@@ -185,7 +194,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_can_convert_to_array()
+    public function it_can_convert_to_array(): void
     {
         $this->url->setLastMod('2017-01-01 00:00:00');
 
@@ -201,7 +210,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_can_convert_to_json()
+    public function it_can_convert_to_json(): void
     {
         $this->url->setLastMod('2017-01-01 00:00:00');
 
@@ -212,7 +221,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_must_escape_the_url_location()
+    public function it_must_escape_the_url_location(): void
     {
         $url = Url::make('http://www.example.com/ümlat.php&q=name')
             ->setTitle('<hello type="shout">world</hello>');
@@ -222,47 +231,47 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function it_must_fail_if_loc_is_invalid_1()
+    public function it_must_fail_if_loc_is_invalid_1(): void
     {
-        $this->expectException(\Arcanedev\LaravelSitemap\Exceptions\SitemapException::class);
+        $this->expectException(SitemapException::class);
         $this->expectExceptionMessage('The [loc] attribute is required and must be string value.');
 
         Url::make(null);
     }
 
     /** @test */
-    public function it_must_fail_if_loc_is_invalid_2()
+    public function it_must_fail_if_loc_is_invalid_2(): void
     {
-        $this->expectException(\Arcanedev\LaravelSitemap\Exceptions\SitemapException::class);
+        $this->expectException(SitemapException::class);
         $this->expectExceptionMessage('The [loc] attribute is required and must be string value.');
 
         Url::make(true);
     }
 
     /** @test */
-    public function it_must_fail_if_priority_is_invalid_1()
+    public function it_must_fail_if_priority_is_invalid_1(): void
     {
-        $this->expectException(\Arcanedev\LaravelSitemap\Exceptions\SitemapException::class);
+        $this->expectException(SitemapException::class);
         $this->expectExceptionMessage('The [priority] value must be numeric.');
 
         Url::make($this->baseUrl)->setPriority('foo');
     }
 
     /** @test */
-    public function it_must_fail_if_priority_is_invalid_2()
+    public function it_must_fail_if_priority_is_invalid_2(): void
     {
-        $this->expectException(\Arcanedev\LaravelSitemap\Exceptions\SitemapException::class);
+        $this->expectException(SitemapException::class);
         $this->expectExceptionMessage('The [priority] value must be between `0.0` and `1.0`, `2` was given.');
 
         Url::make($this->baseUrl)->setPriority('2.0');
     }
 
     /** @test */
-    public function it_can_manipulate_extra_attributes()
+    public function it_can_manipulate_extra_attributes(): void
     {
         $url = Url::makeFromArray([
             'loc'        => 'http://example.com',
-            'lastmod'    => \Carbon\Carbon::create(2017, 01, 01, 00, 00, 00),
+            'lastmod'    => Carbon::create(2017, 01, 01, 00, 00, 00),
             'changefreq' => ChangeFrequency::DAILY,
             'priority'   => 1.0,
             'title'      => 'Hello world',

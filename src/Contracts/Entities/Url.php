@@ -1,8 +1,11 @@
-<?php namespace Arcanedev\LaravelSitemap\Contracts\Entities;
+<?php
 
-use DateTime;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Contracts\Entities;
+
+use DateTimeInterface;
+use Illuminate\Contracts\Support\{Arrayable, Jsonable};
 use JsonSerializable;
 
 /**
@@ -23,14 +26,14 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      *
      * @return string
      */
-    public function getLoc();
+    public function getLoc(): string;
 
     /**
      * Set the url location.
      *
      * @param  string  $loc
      *
-     * @return self
+     * @return $this
      */
     public function setLoc($loc);
 
@@ -39,7 +42,7 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      *
      * @return \DateTimeInterface
      */
-    public function getLastMod();
+    public function getLastMod(): DateTimeInterface;
 
     /**
      * Format the url last modification.
@@ -48,7 +51,7 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      *
      * @return string
      */
-    public function formatLastMod($format = DateTime::ATOM);
+    public function formatLastMod(string $format = DateTimeInterface::ATOM): string;
 
     /**
      * Set the last modification date.
@@ -56,39 +59,39 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      * @param  string|\DateTimeInterface  $lastModDate
      * @param  string                     $format
      *
-     * @return self
+     * @return $this
      */
-    public function setLastMod($lastModDate, $format = 'Y-m-d H:i:s');
+    public function setLastMod($lastModDate, string $format = 'Y-m-d H:i:s');
 
     /**
      * Get the change frequency.
      *
      * @return string
      */
-    public function getChangeFreq();
+    public function getChangeFreq(): string;
 
     /**
      * Set the change frequency.
      *
      * @param  string  $changeFreq
      *
-     * @return self
+     * @return $this
      */
-    public function setChangeFreq($changeFreq);
+    public function setChangeFreq(string $changeFreq);
 
     /**
      * Get the priority.
      *
      * @return float
      */
-    public function getPriority();
+    public function getPriority(): float;
 
     /**
      * Set the priority.
      *
-     * @param  float  $priority
+     * @param  float|mixed  $priority
      *
-     * @return self
+     * @return $this
      */
     public function setPriority($priority);
 
@@ -97,16 +100,16 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      *
      * @return string|null
      */
-    public function getTitle();
+    public function getTitle(): ?string;
 
     /**
      * Get the title.
      *
-     * @param  string  $title
+     * @param  string|null  $title
      *
-     * @return self
+     * @return $this
      */
-    public function setTitle($title);
+    public function setTitle(?string $title);
 
     /**
      * Get an attribute from the container.
@@ -124,9 +127,9 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      * @param  string  $key
      * @param  mixed   $value
      *
-     * @return self
+     * @return $this
      */
-    public function set($key, $value);
+    public function set(string $key, $value);
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -138,7 +141,7 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      *
      * @param  string  $loc
      *
-     * @return \Arcanedev\LaravelSitemap\Entities\Url
+     * @return $this
      */
     public static function make($loc);
 
@@ -147,7 +150,7 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      *
      * @param  array  $attributes
      *
-     * @return \Arcanedev\LaravelSitemap\Entities\Url
+     * @return $this
      */
     public static function makeFromArray(array $attributes);
 
@@ -158,5 +161,5 @@ interface Url extends Arrayable, Jsonable, JsonSerializable
      *
      * @return bool
      */
-    public function has($key);
+    public function has(string $key): bool;
 }

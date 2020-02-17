@@ -1,8 +1,17 @@
-<?php namespace Arcanedev\LaravelSitemap\Tests\Entities;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Tests\Entities;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\ChangeFrequency;
+use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap as SitemapContract;
+use DateTime;
 use Arcanedev\LaravelSitemap\Entities\{Sitemap, Url};
 use Arcanedev\LaravelSitemap\Tests\TestCase;
+use Countable;
+use Illuminate\Contracts\Support\{Arrayable, Jsonable};
+use JsonSerializable;
 use Spatie\Snapshots\MatchesSnapshots;
 
 /**
@@ -53,15 +62,15 @@ class SitemapTest extends TestCase
      */
 
     /** @test */
-    public function it_can_be_instantiated()
+    public function it_can_be_instantiated(): void
     {
         $expectations = [
-            \Countable::class,
-            \JsonSerializable::class,
-            \Illuminate\Contracts\Support\Arrayable::class,
-            \Illuminate\Contracts\Support\Jsonable::class,
-            \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap::class,
-            \Arcanedev\LaravelSitemap\Entities\Sitemap::class,
+            Countable::class,
+            JsonSerializable::class,
+            Arrayable::class,
+            Jsonable::class,
+            SitemapContract::class,
+            Sitemap::class,
         ];
 
         foreach ($expectations as $expected) {
@@ -72,17 +81,17 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_can_make()
+    public function it_can_make(): void
     {
         $map = Sitemap::make();
 
         $expectations = [
-            \Countable::class,
-            \JsonSerializable::class,
-            \Illuminate\Contracts\Support\Arrayable::class,
-            \Illuminate\Contracts\Support\Jsonable::class,
-            \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap::class,
-            \Arcanedev\LaravelSitemap\Entities\Sitemap::class,
+            Countable::class,
+            JsonSerializable::class,
+            Arrayable::class,
+            Jsonable::class,
+            SitemapContract::class,
+            Sitemap::class,
         ];
 
         foreach ($expectations as $expected) {
@@ -93,17 +102,17 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_can_add_url_to_the_collection()
+    public function it_can_add_url_to_the_collection(): void
     {
         static::assertSame(0, $this->sitemap->count());
 
-        $this->sitemap->add($this->createUrlSample());
+        $this->sitemap->add(static::createUrlSample());
 
         static::assertSame(1, $this->sitemap->count());
     }
 
     /** @test */
-    public function it_can_create_and_add_url_to_collection()
+    public function it_can_create_and_add_url_to_collection(): void
     {
         static::assertSame(0, $this->sitemap->count());
 
@@ -127,9 +136,9 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_has_an_existing_url()
+    public function it_can_check_if_has_an_existing_url(): void
     {
-        $url = $this->createUrlSample();
+        $url = static::createUrlSample();
 
         static::assertFalse($this->sitemap->has($url->getLoc()));
 
@@ -139,9 +148,9 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_url_by_its_loc()
+    public function it_can_get_url_by_its_loc(): void
     {
-        $url = $this->createUrlSample();
+        $url = static::createUrlSample();
 
         static::assertNull($this->sitemap->getUrl($url->getLoc()));
 
@@ -151,11 +160,11 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_can_convert_to_array()
+    public function it_can_convert_to_array(): void
     {
         static::assertSame([], $this->sitemap->toArray());
 
-        $this->sitemap->add($this->createUrlSample());
+        $this->sitemap->add(static::createUrlSample());
 
         $expected = [
             [
@@ -171,14 +180,14 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_can_convert_to_json()
+    public function it_can_convert_to_json(): void
     {
         $expected = '[]';
 
         static::assertSame($expected, json_encode($this->sitemap));
         static::assertSame($expected, $this->sitemap->toJson());
 
-        $this->sitemap->add($this->createUrlSample());
+        $this->sitemap->add(static::createUrlSample());
 
         $expected = json_encode($this->sitemap->toArray());
 
@@ -187,7 +196,7 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_should_treats_urls_as_the_basic_collection_class()
+    public function it_should_treats_urls_as_the_basic_collection_class(): void
     {
         $this->sitemap = $this->createBlogSitemap();
 
@@ -197,7 +206,7 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_number_of_urls_is_exceeded()
+    public function it_can_check_if_number_of_urls_is_exceeded(): void
     {
         // Max is 500 for tests
 
@@ -218,9 +227,9 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_can_set_urls()
+    public function it_can_set_urls(): void
     {
-        $this->sitemap->add($this->createUrlSample());
+        $this->sitemap->add(static::createUrlSample());
 
         static::assertSame(1, $this->sitemap->count());
 
@@ -230,7 +239,7 @@ class SitemapTest extends TestCase
             ['loc' => 'http://example.com/contact'],
         ]);
 
-        $now = new \DateTime;
+        $now = new DateTime;
 
         $this->sitemap->setUrls($urls->transform(function (array $item) use ($now) {
             return Url::makeFromArray($item)->setLastMod($now);
@@ -238,7 +247,7 @@ class SitemapTest extends TestCase
 
         static::assertSame(3, $this->sitemap->count());
 
-        $formattedDate = $now->format(\DateTime::ATOM);
+        $formattedDate = $now->format(DateTime::ATOM);
 
         $expected = [
             [
@@ -266,9 +275,9 @@ class SitemapTest extends TestCase
     }
 
     /** @test */
-    public function it_can_add_many_urls_to_the_collection()
+    public function it_can_add_many_urls_to_the_collection(): void
     {
-        $this->sitemap->add($this->createUrlSample());
+        $this->sitemap->add(static::createUrlSample());
 
         static::assertSame(1, $this->sitemap->count());
 
@@ -278,7 +287,7 @@ class SitemapTest extends TestCase
             ['loc' => 'http://example.com/contact'],
         ]);
 
-        $now = new \DateTime;
+        $now = new DateTime;
 
         $this->sitemap->addMany($urls->transform(function (array $item) use ($now) {
             return Url::makeFromArray($item)->setLastMod($now);
@@ -286,7 +295,7 @@ class SitemapTest extends TestCase
 
         static::assertSame(4, $this->sitemap->count());
 
-        $formattedDate = $now->format(\DateTime::ATOM);
+        $formattedDate = $now->format(DateTime::ATOM);
 
         $expected = [
             [
@@ -329,7 +338,7 @@ class SitemapTest extends TestCase
      *
      * @return \Arcanedev\LaravelSitemap\Entities\Url
      */
-    private function createUrlSample()
+    private static function createUrlSample(): Url
     {
         return Url::make('http://example.com')
             ->setChangeFreq(ChangeFrequency::ALWAYS)

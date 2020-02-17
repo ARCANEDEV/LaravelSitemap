@@ -1,8 +1,13 @@
-<?php namespace Arcanedev\LaravelSitemap\Entities;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Entities;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\Url as UrlContract;
 use Arcanedev\LaravelSitemap\Exceptions\SitemapException;
 use DateTime;
+use DateTimeInterface;
 use Illuminate\Support\{Arr, Fluent};
 
 /**
@@ -47,7 +52,7 @@ class Url extends Fluent implements UrlContract
      *
      * @return string
      */
-    public function getLoc()
+    public function getLoc(): string
     {
         return $this->escape($this->get('loc'));
     }
@@ -57,7 +62,7 @@ class Url extends Fluent implements UrlContract
      *
      * @param  string  $loc
      *
-     * @return self
+     * @return $this
      */
     public function setLoc($loc)
     {
@@ -69,7 +74,7 @@ class Url extends Fluent implements UrlContract
      *
      * @return \DateTimeInterface
      */
-    public function getLastMod()
+    public function getLastMod(): DateTimeInterface
     {
         return $this->get('lastmod');
     }
@@ -81,7 +86,7 @@ class Url extends Fluent implements UrlContract
      *
      * @return string
      */
-    public function formatLastMod($format = DateTime::ATOM)
+    public function formatLastMod(string $format = DateTimeInterface::ATOM): string
     {
         return $this->getLastMod()->format($format);
     }
@@ -92,9 +97,9 @@ class Url extends Fluent implements UrlContract
      * @param  string|\DateTimeInterface  $lastModDate
      * @param  string                     $format
      *
-     * @return self
+     * @return $this
      */
-    public function setLastMod($lastModDate, $format = 'Y-m-d H:i:s')
+    public function setLastMod($lastModDate, string $format = 'Y-m-d H:i:s')
     {
         if (is_string($lastModDate))
             $lastModDate = DateTime::createFromFormat($format, $lastModDate);
@@ -107,7 +112,7 @@ class Url extends Fluent implements UrlContract
      *
      * @return string
      */
-    public function getChangeFreq()
+    public function getChangeFreq(): string
     {
         return $this->get('changefreq');
     }
@@ -117,9 +122,9 @@ class Url extends Fluent implements UrlContract
      *
      * @param  string  $changeFreq
      *
-     * @return self
+     * @return $this
      */
-    public function setChangeFreq($changeFreq)
+    public function setChangeFreq(string $changeFreq)
     {
         return $this->set('changefreq', strtolower(trim($changeFreq)));
     }
@@ -129,7 +134,7 @@ class Url extends Fluent implements UrlContract
      *
      * @return float
      */
-    public function getPriority()
+    public function getPriority(): float
     {
         return $this->get('priority');
     }
@@ -137,9 +142,9 @@ class Url extends Fluent implements UrlContract
     /**
      * Set the priority.
      *
-     * @param  float  $priority
+     * @param  float|mixed  $priority
      *
-     * @return self
+     * @return $this
      */
     public function setPriority($priority)
     {
@@ -153,7 +158,7 @@ class Url extends Fluent implements UrlContract
      *
      * @return string|null
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->escape($this->get('title'));
     }
@@ -161,11 +166,11 @@ class Url extends Fluent implements UrlContract
     /**
      * Get the title.
      *
-     * @param  string  $title
+     * @param  string|null  $title
      *
-     * @return self
+     * @return $this
      */
-    public function setTitle($title)
+    public function setTitle(?string $title)
     {
         return $this->set('title', $title);
     }
@@ -176,9 +181,9 @@ class Url extends Fluent implements UrlContract
      * @param  string  $key
      * @param  mixed   $value
      *
-     * @return self
+     * @return $this
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         $this->attributes[$key] = $value;
 
@@ -195,7 +200,7 @@ class Url extends Fluent implements UrlContract
      *
      * @param  string  $loc
      *
-     * @return \Arcanedev\LaravelSitemap\Entities\Url
+     * @return $this
      */
     public static function make($loc)
     {
@@ -207,7 +212,7 @@ class Url extends Fluent implements UrlContract
      *
      * @param  array  $attributes
      *
-     * @return \Arcanedev\LaravelSitemap\Entities\Url
+     * @return $this
      */
     public static function makeFromArray(array $attributes)
     {
@@ -221,7 +226,7 @@ class Url extends Fluent implements UrlContract
      *
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return ! is_null($this->get($key));
     }
@@ -246,18 +251,19 @@ class Url extends Fluent implements UrlContract
     /**
      * Escape the given value.
      *
-     * @param  string  $value
+     * @param  string|mixed  $value
      *
-     * @return string
+     * @return string|null
      */
     protected function escape($value)
     {
         if (is_null($value))
             return $value;
 
-        return config('sitemap.escaping', true)
-            ? htmlentities($value, ENT_XML1, 'UTF-8')
-            : $value;
+        if (config('sitemap.escaping', true))
+            $value = htmlentities($value, ENT_XML1, 'UTF-8');
+
+        return $value;
     }
 
     /**
@@ -269,9 +275,9 @@ class Url extends Fluent implements UrlContract
      *
      * @throws \Arcanedev\LaravelSitemap\Exceptions\SitemapException
      */
-    protected function checkLoc($loc)
+    protected function checkLoc($loc): string
     {
-        if (is_null($loc) || ! is_string($loc))
+        if ( ! is_string($loc))
             throw new SitemapException('The [loc] attribute is required and must be string value.');
 
         return $loc;
@@ -280,13 +286,13 @@ class Url extends Fluent implements UrlContract
     /**
      * Check the priority value.
      *
-     * @param  float  $priority
+     * @param  float|mixed  $priority
      *
      * @return float
      *
      * @throws \Arcanedev\LaravelSitemap\Exceptions\SitemapException
      */
-    protected function checkPriority($priority)
+    protected function checkPriority($priority): float
     {
         if ( ! is_numeric($priority))
             throw new SitemapException("The [priority] value must be numeric.");

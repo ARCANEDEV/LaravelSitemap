@@ -1,4 +1,8 @@
-<?php namespace Arcanedev\LaravelSitemap\Exceptions;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Exceptions;
 
 use Exception;
 

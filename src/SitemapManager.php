@@ -1,9 +1,14 @@
-<?php namespace Arcanedev\LaravelSitemap;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap as SitemapContract;
 use Arcanedev\LaravelSitemap\Contracts\SitemapManager as SitemapManagerContract;
 use Arcanedev\LaravelSitemap\Entities\Sitemap;
 use Illuminate\Support\{Arr, Collection, Str};
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class     SitemapManager
@@ -47,7 +52,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @param  string  $format
      *
-     * @return self
+     * @return $this
      */
     public function format($format)
     {
@@ -67,9 +72,9 @@ class SitemapManager implements SitemapManagerContract
      * @param  string    $name
      * @param  callable  $callback
      *
-     * @return self
+     * @return $this
      */
-    public function create($name, callable $callback)
+    public function create(string $name, callable $callback)
     {
         return $this->add($name, tap(Sitemap::make()->setPath($name), $callback));
     }
@@ -80,9 +85,9 @@ class SitemapManager implements SitemapManagerContract
      * @param  string                                                $name
      * @param  \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap  $sitemap
      *
-     * @return self
+     * @return $this
      */
-    public function add($name, SitemapContract $sitemap)
+    public function add(string $name, SitemapContract $sitemap)
     {
         $this->sitemaps->put($name, $sitemap);
 
@@ -94,7 +99,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @return \Illuminate\Support\Collection
      */
-    public function all()
+    public function all(): Collection
     {
         return $this->sitemaps;
     }
@@ -105,9 +110,9 @@ class SitemapManager implements SitemapManagerContract
      * @param  string      $name
      * @param  mixed|null  $default
      *
-     * @return mixed
+     * @return \Arcanedev\LaravelSitemap\Entities\Sitemap|mixed|null
      */
-    public function get($name, $default = null)
+    public function get(string $name, $default = null)
     {
         return $this->sitemaps->get($name, $default);
     }
@@ -119,7 +124,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @return bool
      */
-    public function has($name)
+    public function has(string $name): bool
     {
         if ( ! Str::contains($name, '.'))
             return $this->sitemaps->has($name);
@@ -140,7 +145,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @param  string|array  $names
      *
-     * @return self
+     * @return $this
      */
     public function forget($names)
     {
@@ -154,7 +159,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->sitemaps->count();
     }
@@ -168,7 +173,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @return string|null
      */
-    public function render($name = null)
+    public function render(string $name = null): ?string
     {
         return SitemapBuilder::make()->build($name, $this->sitemaps, $this->format);
     }
@@ -181,9 +186,9 @@ class SitemapManager implements SitemapManagerContract
      *
      * @throws \Throwable
      *
-     * @return self
+     * @return $this
      */
-    public function save($path, $name = null)
+    public function save(string $path, string $name = null)
     {
         if ($this->sitemaps->isEmpty())
             return $this;
@@ -208,9 +213,9 @@ class SitemapManager implements SitemapManagerContract
      *
      * @throws \Throwable
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\Response|mixed
      */
-    public function respond($name = null, $status = 200, array $headers = [])
+    public function respond(string $name = null, int $status = Response::HTTP_OK, array $headers = [])
     {
         return response($this->render($name), $status, array_merge($this->getResponseHeaders(), $headers));
     }
@@ -220,7 +225,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->all()->toArray();
     }
@@ -232,7 +237,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @return string
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         return json_encode($this->jsonSerialize(), $options);
     }
@@ -242,7 +247,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }
@@ -255,7 +260,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @throws \Throwable
      */
-    private function saveMultiple($path, $sitemap)
+    private function saveMultiple(string $path, SitemapContract $sitemap)
     {
         $pathInfo = pathinfo($path);
         $chunks   = $sitemap->chunk();
@@ -263,7 +268,7 @@ class SitemapManager implements SitemapManagerContract
         foreach ($chunks as $key => $item) {
             file_put_contents(
                 $pathInfo['dirname'].DS.$pathInfo['filename'].'-'.$key.'.'.$pathInfo['extension'],
-                SitemapBuilder::make()->build($key, $chunks, $this->format)
+                SitemapBuilder::make()->build((string) $key, $chunks, $this->format)
             );
         }
     }
@@ -273,7 +278,7 @@ class SitemapManager implements SitemapManagerContract
      *
      * @return array
      */
-    protected function getResponseHeaders()
+    protected function getResponseHeaders(): array
     {
         return Arr::get([
             'xml' => ['Content-Type' => 'application/xml'],

@@ -1,10 +1,15 @@
-<?php namespace Arcanedev\LaravelSitemap\Contracts;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Contracts;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap;
 use Countable;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\{Arrayable, Jsonable};
+use Illuminate\Support\Collection;
 use JsonSerializable;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Interface  SitemapManager
@@ -24,7 +29,7 @@ interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializabl
      *
      * @param  string  $format
      *
-     * @return self
+     * @return $this
      */
     public function format($format);
 
@@ -39,9 +44,9 @@ interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializabl
      * @param  string    $name
      * @param  callable  $callback
      *
-     * @return self
+     * @return $this
      */
-    public function create($name, callable $callback);
+    public function create(string $name, callable $callback);
 
     /**
      * Add a sitemap to the collection.
@@ -49,16 +54,16 @@ interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializabl
      * @param  string                                                $name
      * @param  \Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap  $sitemap
      *
-     * @return self
+     * @return $this
      */
-    public function add($name, Sitemap $sitemap);
+    public function add(string $name, Sitemap $sitemap);
 
     /**
      * Get the sitemaps collection.
      *
      * @return \Illuminate\Support\Collection
      */
-    public function all();
+    public function all(): Collection;
 
     /**
      * Get a sitemap instance.
@@ -66,9 +71,9 @@ interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializabl
      * @param  string      $name
      * @param  mixed|null  $default
      *
-     * @return \Arcanedev\LaravelSitemap\Entities\Sitemap|null
+     * @return \Arcanedev\LaravelSitemap\Entities\Sitemap|mixed|null
      */
-    public function get($name, $default = null);
+    public function get(string $name, $default = null);
 
     /**
      * Check if a sitemap exists.
@@ -77,14 +82,14 @@ interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializabl
      *
      * @return bool
      */
-    public function has($name);
+    public function has(string $name): bool;
 
     /**
      * Remove a sitemap from the collection by key.
      *
      * @param  string|array  $names
      *
-     * @return self
+     * @return $this
      */
     public function forget($names);
 
@@ -95,7 +100,7 @@ interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializabl
      *
      * @return string|null
      */
-    public function render($name = null);
+    public function render(string $name = null): ?string;
 
     /**
      * Save the sitemaps.
@@ -103,9 +108,9 @@ interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializabl
      * @param  string       $path
      * @param  string|null  $name
      *
-     * @return self
+     * @return $this
      */
-    public function save($path, $name = null);
+    public function save(string $path, string $name = null);
 
     /**
      * Render the Http response.
@@ -114,7 +119,7 @@ interface SitemapManager extends Arrayable, Countable, Jsonable, JsonSerializabl
      * @param  int     $status
      * @param  array   $headers
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\Response|mixed
      */
-    public function respond($name = null, $status = 200, array $headers = []);
+    public function respond(string $name = null, int $status = Response::HTTP_OK, array $headers = []);
 }

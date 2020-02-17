@@ -1,4 +1,8 @@
-<?php namespace Arcanedev\LaravelSitemap\Entities;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Entities;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap as SitemapContract;
 use Illuminate\Support\Collection;
@@ -46,9 +50,9 @@ class Sitemap implements SitemapContract
      *
      * @param  string  $path
      *
-     * @return self
+     * @return $this
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
 
@@ -60,7 +64,7 @@ class Sitemap implements SitemapContract
      *
      * @return string|null
      */
-    public function getPath()
+    public function getPath(): ?string
     {
         return $this->path;
     }
@@ -70,7 +74,7 @@ class Sitemap implements SitemapContract
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getUrls()
+    public function getUrls(): Collection
     {
         return $this->urls;
     }
@@ -80,7 +84,7 @@ class Sitemap implements SitemapContract
      *
      * @param  \Illuminate\Support\Collection  $urls
      *
-     * @return self
+     * @return $this
      */
     public function setUrls(Collection $urls)
     {
@@ -97,7 +101,7 @@ class Sitemap implements SitemapContract
     /**
      * Make a sitemap instance.
      *
-     * @return self
+     * @return $this
      */
     public static function make()
     {
@@ -112,7 +116,7 @@ class Sitemap implements SitemapContract
      *
      * @return \Arcanedev\LaravelSitemap\Entities\Url|null
      */
-    public function getUrl($loc, $default = null)
+    public function getUrl(string $loc, $default = null)
     {
         return $this->getUrls()->get($loc, $default);
     }
@@ -134,11 +138,11 @@ class Sitemap implements SitemapContract
     /**
      * Add many urls to the collection.
      *
-     * @param  array|\Illuminate\Support\Collection  $urls
+     * @param  iterable|mixed  $urls
      *
-     * @return self
+     * @return $this
      */
-    public function addMany($urls)
+    public function addMany(iterable $urls)
     {
         foreach ($urls as $url) {
             $this->add($url);
@@ -153,9 +157,9 @@ class Sitemap implements SitemapContract
      * @param  string    $loc
      * @param  callable  $callback
      *
-     * @return self
+     * @return $this
      */
-    public function create($loc, callable $callback)
+    public function create(string $loc, callable $callback)
     {
         return $this->add(tap(Url::make($loc), $callback));
     }
@@ -167,7 +171,7 @@ class Sitemap implements SitemapContract
      *
      * @return bool
      */
-    public function has($url)
+    public function has(string $url): bool
     {
         return $this->urls->has($url);
     }
@@ -177,7 +181,7 @@ class Sitemap implements SitemapContract
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->urls->count();
     }
@@ -187,7 +191,7 @@ class Sitemap implements SitemapContract
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->getUrls()->values()->toArray();
     }
@@ -199,7 +203,7 @@ class Sitemap implements SitemapContract
      *
      * @return string
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         return json_encode($this->jsonSerialize(), $options);
     }
@@ -209,7 +213,7 @@ class Sitemap implements SitemapContract
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }
@@ -219,7 +223,7 @@ class Sitemap implements SitemapContract
      *
      * @return bool
      */
-    public function isExceeded()
+    public function isExceeded(): bool
     {
         return $this->count() > $this->getMaxSize();
     }
@@ -229,15 +233,19 @@ class Sitemap implements SitemapContract
      *
      * @return \Illuminate\Support\Collection
      */
-    public function chunk()
+    public function chunk(): Collection
     {
-        return $this->urls->chunk($this->getMaxSize())->mapWithKeys(function ($item, $index) {
-            $pathInfo = pathinfo($this->getPath());
-            $index    = $index + 1;
-            $path     = $pathInfo['dirname'].'/'.$pathInfo['filename'].'-'.$index.'.'.$pathInfo['extension'];
+        return $this->urls
+            ->chunk($this->getMaxSize())
+            ->mapWithKeys(function ($item, $index) {
+                $pathInfo = pathinfo($this->getPath());
+                $index    = $index + 1;
+                $path     = $pathInfo['dirname'].'/'.$pathInfo['filename'].'-'.$index.'.'.$pathInfo['extension'];
 
-            return [$index => (new Sitemap)->setPath($path)->setUrls($item)];
-        });
+                return [
+                    $index => (new Sitemap)->setPath($path)->setUrls($item),
+                ];
+            });
     }
 
     /* -----------------------------------------------------------------
@@ -250,8 +258,8 @@ class Sitemap implements SitemapContract
      *
      * @return int
      */
-    protected function getMaxSize()
+    protected function getMaxSize(): int
     {
-        return config('sitemap.urls-max-size', 50000);
+        return (int) config('sitemap.urls-max-size', 50000);
     }
 }
