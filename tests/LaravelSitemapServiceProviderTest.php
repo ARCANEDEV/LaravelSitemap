@@ -1,4 +1,10 @@
-<?php namespace Arcanedev\LaravelSitemap\Tests;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Tests;
+
+use Arcanedev\LaravelSitemap\LaravelSitemapServiceProvider;
 
 /**
  * Class     LaravelSitemapServiceProviderTest
@@ -25,7 +31,7 @@ class LaravelSitemapServiceProviderTest extends TestCase
     {
         parent::setUp();
 
-        $this->provider = $this->app->getProvider(\Arcanedev\LaravelSitemap\LaravelSitemapServiceProvider::class);
+        $this->provider = $this->app->getProvider(LaravelSitemapServiceProvider::class);
     }
 
     protected function tearDown(): void
@@ -41,14 +47,14 @@ class LaravelSitemapServiceProviderTest extends TestCase
      */
 
     /** @test */
-    public function it_can_be_instantiated()
+    public function it_can_be_instantiated(): void
     {
         $expectations = [
             \Illuminate\Support\ServiceProvider::class,
             \Illuminate\Contracts\Support\DeferrableProvider::class,
             \Arcanedev\Support\Providers\ServiceProvider::class,
             \Arcanedev\Support\Providers\PackageServiceProvider::class,
-            \Arcanedev\LaravelSitemap\LaravelSitemapServiceProvider::class,
+            LaravelSitemapServiceProvider::class,
         ];
 
         foreach ($expectations as $expected) {
@@ -57,7 +63,7 @@ class LaravelSitemapServiceProviderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_provides()
+    public function it_can_provides(): void
     {
         $expected = [
             \Arcanedev\LaravelSitemap\Contracts\SitemapManager::class,

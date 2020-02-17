@@ -1,4 +1,10 @@
-<?php namespace Arcanedev\LaravelSitemap\Contracts\Entities;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Contracts\Entities;
+
+use Illuminate\Support\Collection;
 
 /**
  * Interface  ChangeFrequency
@@ -31,7 +37,7 @@ interface ChangeFrequency
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function keys();
+    public static function keys(): Collection;
 
     /**
      * Get all the valid frequency values.
@@ -40,18 +46,18 @@ interface ChangeFrequency
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function all($locale = null);
+    public static function all(string $locale = null): Collection;
 
     /**
      * Get the translated frequency name.
      *
      * @param  string       $key
-     * @param  string|null  $default
+     * @param  mixed|null   $default
      * @param  string|null  $locale
      *
-     * @return string|null
+     * @return string|mixed|null
      */
-    public static function get($key, $default = null, $locale = null);
+    public static function get(string $key, $default = null, string $locale = null);
 
     /**
      * Check if the given frequency exists.
@@ -60,5 +66,5 @@ interface ChangeFrequency
      *
      * @return bool
      */
-    public static function has($key);
+    public static function has(string $key): bool ;
 }

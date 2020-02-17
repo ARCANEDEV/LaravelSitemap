@@ -1,4 +1,8 @@
-<?php namespace Arcanedev\LaravelSitemap\Tests\Entities;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Tests\Entities;
 
 use Arcanedev\LaravelSitemap\Entities\ChangeFrequency;
 use Arcanedev\LaravelSitemap\Tests\TestCase;
@@ -18,7 +22,7 @@ class ChangeFrequencyTest extends TestCase
      */
 
     /** @test */
-    public function it_can_get_all_keys()
+    public function it_can_get_all_keys(): void
     {
         $frequencies = ChangeFrequency::keys();
 
@@ -38,7 +42,7 @@ class ChangeFrequencyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_all_translated_frequencies()
+    public function it_can_get_all_translated_frequencies(): void
     {
         $frequencies = ChangeFrequency::all();
 
@@ -58,7 +62,7 @@ class ChangeFrequencyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_all_translated_frequencies_with_a_given_locale()
+    public function it_can_get_all_translated_frequencies_with_a_given_locale(): void
     {
         $frequencies = ChangeFrequency::all('fr');
 
@@ -78,7 +82,7 @@ class ChangeFrequencyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_one_translated_frequency()
+    public function it_can_get_one_translated_frequency(): void
     {
         $key = ChangeFrequency::ALWAYS;
 
@@ -97,7 +101,7 @@ class ChangeFrequencyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_frequency_exists()
+    public function it_can_check_if_frequency_exists(): void
     {
         foreach (ChangeFrequency::keys() as $key) {
             static::assertTrue(ChangeFrequency::has($key));

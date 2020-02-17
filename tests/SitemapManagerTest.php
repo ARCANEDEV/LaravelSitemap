@@ -1,7 +1,12 @@
-<?php namespace Arcanedev\LaravelSitemap\Tests;
+<?php
 
-use Arcanedev\LaravelSitemap\Entities\Sitemap;
-use Arcanedev\LaravelSitemap\Entities\Url;
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Tests;
+
+use Arcanedev\LaravelSitemap\Contracts\SitemapManager;
+use Illuminate\Http\Response;
+use Arcanedev\LaravelSitemap\Entities\{Sitemap, Url};
 use Spatie\Snapshots\MatchesSnapshots;
 
 /**
@@ -36,7 +41,7 @@ class SitemapManagerTest extends TestCase
     {
         parent::setUp();
 
-        $this->manager = $this->app->make(\Arcanedev\LaravelSitemap\Contracts\SitemapManager::class);
+        $this->manager = $this->app->make(SitemapManager::class);
     }
 
     protected function tearDown(): void
@@ -52,10 +57,10 @@ class SitemapManagerTest extends TestCase
      */
 
     /** @test */
-    public function it_can_be_instantiated()
+    public function it_can_be_instantiated(): void
     {
         $expectations = [
-            \Arcanedev\LaravelSitemap\Contracts\SitemapManager::class,
+            SitemapManager::class,
             \Arcanedev\LaravelSitemap\SitemapManager::class,
         ];
 
@@ -65,14 +70,14 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_empty_sitemaps_collection_on_creation()
+    public function it_should_return_empty_sitemaps_collection_on_creation(): void
     {
         static::assertCount(0, $this->manager->all());
         static::assertSame(0, $this->manager->count());
     }
 
     /** @test */
-    public function it_can_add_a_sitemap_to_collection()
+    public function it_can_add_a_sitemap_to_collection(): void
     {
         $this->manager->add('pages', $sitemap = new Sitemap);
 
@@ -83,7 +88,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_a_sitemap_by_its_name()
+    public function it_can_get_a_sitemap_by_its_name(): void
     {
         $this->manager->add('blog', $sitemap = new Sitemap);
 
@@ -92,11 +97,11 @@ class SitemapManagerTest extends TestCase
 
         $sitemap = $this->manager->get('blog');
 
-        static::assertInstanceOf(\Arcanedev\LaravelSitemap\Entities\Sitemap::class, $sitemap);
+        static::assertInstanceOf(Sitemap::class, $sitemap);
     }
 
     /** @test */
-    public function it_can_create_and_add_a_sitemap_to_collection()
+    public function it_can_create_and_add_a_sitemap_to_collection(): void
     {
         $this->manager->create('pages', function (Sitemap $sitemap) {
             $sitemap->add(Url::make('http://example.com'));
@@ -111,7 +116,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_forget_sitemaps_from_collection()
+    public function it_can_forget_sitemaps_from_collection(): void
     {
         $this->populatedManager();
 
@@ -123,7 +128,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_convert_to_array()
+    public function it_can_convert_to_array(): void
     {
         static::assertSame([], $this->manager->toArray());
 
@@ -141,7 +146,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_convert_to_json()
+    public function it_can_convert_to_json(): void
     {
         $expected = '[]';
 
@@ -158,7 +163,7 @@ class SitemapManagerTest extends TestCase
 
 
     /** @test */
-    public function it_can_render_sitemaps()
+    public function it_can_render_sitemaps(): void
     {
         $this->populatedManager();
 
@@ -170,13 +175,13 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_null_when_rendering_an_empty_manager()
+    public function it_should_return_null_when_rendering_an_empty_manager(): void
     {
         static::assertNull($this->manager->render());
     }
 
     /** @test */
-    public function it_can_save_sitemap_index()
+    public function it_can_save_sitemap_index(): void
     {
         $directory = __DIR__.'/__temp__';
         $this->manager->save($path = "$directory/sitemap.xml");
@@ -194,7 +199,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_save_sitemaps()
+    public function it_can_save_sitemaps(): void
     {
         $directory = __DIR__.'/__temp__';
 
@@ -213,7 +218,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_save_the_single_sitemap_instead_of_index()
+    public function it_can_save_the_single_sitemap_instead_of_index(): void
     {
         $directory = __DIR__.'/__temp__';
         $path = "$directory/sitemap.xml";
@@ -229,7 +234,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_switch_sitemap_format_to_txt()
+    public function it_can_switch_sitemap_format_to_txt(): void
     {
         $this->manager->format('txt');
 
@@ -245,7 +250,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_switch_sitemap_format_to_rss()
+    public function it_can_switch_sitemap_format_to_rss(): void
     {
         $this->manager->format('rss');
 
@@ -261,7 +266,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_must_return_null_if_format_is_invalid()
+    public function it_must_return_null_if_format_is_invalid(): void
     {
         $this->populatedManager();
 
@@ -273,7 +278,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_chunk_a_huge_sitemap_on_render()
+    public function it_can_chunk_a_huge_sitemap_on_render(): void
     {
         $this->manager->add('blog', $this->createBlogSitemap(499));
 
@@ -291,7 +296,7 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_chunk_a_huge_sitemap_on_save()
+    public function it_can_chunk_a_huge_sitemap_on_save(): void
     {
         $this->manager->add('blog', $this->createBlogSitemap(499));
 
@@ -316,13 +321,13 @@ class SitemapManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_respond_with_http_response()
+    public function it_can_respond_with_http_response(): void
     {
         $response = $this->manager->respond();
 
-        static::assertInstanceOf(\Illuminate\Http\Response::class, $response);
+        static::assertInstanceOf(Response::class, $response);
 
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
         static::assertSame('', $response->getContent());
         static::assertSame('application/xml', $response->headers->get('content-type'));
 
@@ -330,19 +335,19 @@ class SitemapManagerTest extends TestCase
 
         $response = $this->manager->respond();
 
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
         static::assertMatchesXmlSnapshot($response->getContent());
         static::assertSame('application/xml', $response->headers->get('content-type'));
 
         $response = $this->manager->format('txt')->respond();
 
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
         static::assertMatchesSnapshot($response->getContent());
         static::assertSame('text/plain', $response->headers->get('content-type'));
 
         $response = $this->manager->format('rss')->respond('blog');
 
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
         static::assertMatchesSnapshot($response->getContent());
         static::assertSame('application/rss+xml', $response->headers->get('content-type'));
     }
@@ -355,7 +360,7 @@ class SitemapManagerTest extends TestCase
     /**
      * Populate the manager with sitemaps.
      */
-    private function populatedManager()
+    private function populatedManager(): void
     {
         $this->manager->add('pages', $this->createPagesSitemap());
         $this->manager->add('blog', $this->createBlogSitemap());

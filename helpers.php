@@ -6,9 +6,9 @@ if ( ! function_exists('sitemap')) {
     /**
      * Get the Sitemap Manager instance.
      *
-     * @return SitemapManager
+     * @return \Arcanedev\LaravelSitemap\Contracts\SitemapManager
      */
-    function sitemap() {
+    function sitemap(): SitemapManager {
         return app(SitemapManager::class);
     }
 }

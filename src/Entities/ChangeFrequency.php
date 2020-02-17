@@ -1,4 +1,8 @@
-<?php namespace Arcanedev\LaravelSitemap\Entities;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Entities;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\ChangeFrequency as ChangeFrequencyContract;
 use Illuminate\Support\Collection;
@@ -21,7 +25,7 @@ class ChangeFrequency implements ChangeFrequencyContract
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function keys()
+    public static function keys(): Collection
     {
         return new Collection([
             static::ALWAYS,
@@ -37,11 +41,11 @@ class ChangeFrequency implements ChangeFrequencyContract
     /**
      * Get all the valid frequency values.
      *
-     * @param  string|null $locale
+     * @param  string|null  $locale
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function all($locale = null)
+    public static function all(string $locale = null): Collection
     {
         return static::keys()->mapWithKeys(function ($key) use ($locale) {
             return [$key => trans("sitemap::frequencies.$key", [], $locale)];
@@ -55,9 +59,9 @@ class ChangeFrequency implements ChangeFrequencyContract
      * @param  string|null  $default
      * @param  string|null  $locale
      *
-     * @return string|null
+     * @return string|mixed|null
      */
-    public static function get($key, $default = null, $locale = null)
+    public static function get($key, $default = null, string $locale = null)
     {
         return static::all($locale)->get($key, $default);
     }
@@ -65,11 +69,11 @@ class ChangeFrequency implements ChangeFrequencyContract
     /**
      * Check if the given frequency exists.
      *
-     * @param  string $key
+     * @param  string  $key
      *
      * @return bool
      */
-    public static function has($key)
+    public static function has(string $key): bool
     {
         return static::keys()->flip()->has($key);
     }

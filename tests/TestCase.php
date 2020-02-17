@@ -1,8 +1,11 @@
-<?php namespace Arcanedev\LaravelSitemap\Tests;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap\Tests;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\ChangeFrequency;
-use Arcanedev\LaravelSitemap\Entities\Sitemap;
-use Arcanedev\LaravelSitemap\Entities\Url;
+use Arcanedev\LaravelSitemap\Entities\{Sitemap, Url};
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 /**
@@ -25,7 +28,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return array
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             \Arcanedev\LaravelSitemap\LaravelSitemapServiceProvider::class,
@@ -37,7 +40,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @param  \Illuminate\Foundation\Application   $app
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('sitemap.urls-max-size', 100);
     }
@@ -54,7 +57,7 @@ abstract class TestCase extends BaseTestCase
      * @param  array   $array
      * @param  string  $message
      */
-    public static function assertArrayHasKeys(array $keys, $array, $message = '')
+    public static function assertArrayHasKeys(array $keys, $array, $message = ''): void
     {
         foreach ($keys as $key) {
             static::assertArrayHasKey($key, $array, $message);
@@ -67,9 +70,11 @@ abstract class TestCase extends BaseTestCase
      */
 
     /**
+     * Create 'pages' sitemap.
+     *
      * @return \Arcanedev\LaravelSitemap\Entities\Sitemap
      */
-    protected function createPagesSitemap()
+    protected function createPagesSitemap(): Sitemap
     {
         return tap(new Sitemap, function (Sitemap $sitemap) {
             $baseUrl = 'http://example.com';
@@ -83,11 +88,13 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * Create `blog` sitemap.
+     *
      * @param  int  $times
      *
      * @return \Arcanedev\LaravelSitemap\Entities\Sitemap
      */
-    protected function createBlogSitemap($times = 10)
+    protected function createBlogSitemap($times = 10): Sitemap
     {
         return tap(new Sitemap, function (Sitemap $sitemap) use ($times) {
             $baseUrl = 'http://example.com';

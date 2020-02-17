@@ -1,4 +1,8 @@
-<?php namespace Arcanedev\LaravelSitemap;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap;
 
 use Arcanedev\LaravelSitemap\Contracts\Entities\Sitemap;
 use DOMDocument;
@@ -24,13 +28,13 @@ class SitemapBuilder
      */
     public static function make()
     {
-        return new static();
+        return new static;
     }
 
     /**
      * Build the sitemap.
      *
-     * @param  string                          $name
+     * @param  string|null                     $name
      * @param  \Illuminate\Support\Collection  $sitemaps
      * @param  string                          $format
      *
@@ -38,7 +42,7 @@ class SitemapBuilder
      *
      * @return string|null
      */
-    public function build($name, Collection $sitemaps, $format)
+    public function build(?string $name, Collection $sitemaps, string $format): ?string
     {
         if ($sitemaps->isEmpty())
             return null;
@@ -75,7 +79,7 @@ class SitemapBuilder
      *
      * @return string|null
      */
-    protected function renderSitemap($format, Sitemap $sitemap = null, $key = null)
+    protected function renderSitemap(string $format, Sitemap $sitemap = null, string $key = null)
     {
         if (is_null($sitemap))
             return null;
@@ -85,9 +89,10 @@ class SitemapBuilder
 
         $chunks = $sitemap->chunk();
 
-        return is_null($key)
-            ? static::renderSitemapIndex($format, $chunks)
-            : static::renderSitemap($format, $chunks->get($key));
+        if (is_null($key))
+            return static::renderSitemapIndex($format, $chunks);
+
+        return static::renderSitemap($format, $chunks->get($key));
     }
 
     /**
@@ -100,7 +105,7 @@ class SitemapBuilder
      *
      * @return string|null
      */
-    protected function renderSitemapIndex($format, $sitemaps)
+    protected function renderSitemapIndex(string $format, Collection $sitemaps): ?string
     {
         return static::render($format, 'sitemap-index', compact('sitemaps'));
     }
@@ -116,9 +121,11 @@ class SitemapBuilder
      *
      * @return string|null
      */
-    protected function render($format, $type, array $data)
+    protected function render(string $format, string $type, array $data): ?string
     {
-        switch ($format= strtolower(trim($format))) {
+        $format = strtolower(trim($format));
+
+        switch ($format) {
             case 'xml':
             case 'rss':
                 return static::renderXml($format, $type, $data);
@@ -140,7 +147,7 @@ class SitemapBuilder
      *
      * @return string
      */
-    protected function renderXml($format, $type, array $data)
+    protected function renderXml(string $format, string $type, array $data): string
     {
         return tap(new DOMDocument('1.0'), function (DOMDocument $document) use ($format, $type, $data) {
             $document->preserveWhiteSpace = false;
@@ -162,7 +169,7 @@ class SitemapBuilder
      *
      * @return string
      */
-    protected function renderView($type, $format, array $data)
+    protected function renderView(string $type, string $format, array $data): string
     {
         return view("sitemap::{$type}.{$format}", $data)->render();
     }

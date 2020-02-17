@@ -1,5 +1,10 @@
-<?php namespace Arcanedev\LaravelSitemap;
+<?php
 
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelSitemap;
+
+use Arcanedev\LaravelSitemap\Contracts\SitemapManager as SitemapManagerContract;
 use Arcanedev\Support\Providers\PackageServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 
@@ -37,7 +42,7 @@ class LaravelSitemapServiceProvider extends PackageServiceProvider implements De
 
         $this->registerConfig();
 
-        $this->singleton(Contracts\SitemapManager::class, SitemapManager::class);
+        $this->singleton(SitemapManagerContract::class, SitemapManager::class);
     }
 
 
@@ -59,7 +64,7 @@ class LaravelSitemapServiceProvider extends PackageServiceProvider implements De
     public function provides(): array
     {
         return [
-            Contracts\SitemapManager::class,
+            SitemapManagerContract::class,
         ];
     }
 }
