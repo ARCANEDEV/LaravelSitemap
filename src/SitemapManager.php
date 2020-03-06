@@ -267,7 +267,7 @@ class SitemapManager implements SitemapManagerContract
 
         foreach ($chunks as $key => $item) {
             file_put_contents(
-                $pathInfo['dirname'].DS.$pathInfo['filename'].'-'.$key.'.'.$pathInfo['extension'],
+                $pathInfo['dirname'].DIRECTORY_SEPARATOR.$pathInfo['filename'].'-'.$key.'.'.$pathInfo['extension'],
                 SitemapBuilder::make()->build((string) $key, $chunks, $this->format)
             );
         }

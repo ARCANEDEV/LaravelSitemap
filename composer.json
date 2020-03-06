@@ -14,16 +14,15 @@
     "type":    "library",
     "license": "MIT",
     "require": {
-        "php":               ">=7.2.0",
+        "php":               "^7.2.5",
         "ext-dom":           "*",
         "ext-json":          "*",
-        "arcanedev/support": "^5.1.1"
+        "arcanedev/support": "^7.0"
     },
     "require-dev": {
-        "orchestra/testbench":                "^4.0",
-        "phpunit/phpcov":                     "^6.0",
-        "phpunit/phpunit":                    "^8.0",
-        "spatie/phpunit-snapshot-assertions": "^2.1"
+        "orchestra/testbench":                "^5.0",
+        "phpunit/phpunit":                    "^8.5|^9.0",
+        "spatie/phpunit-snapshot-assertions": "^3.0|^4.0"
     },
     "autoload": {
         "psr-4": {
@@ -42,5 +41,7 @@
                 "Arcanedev\\LaravelSitemap\\LaravelSitemapServiceProvider"
             ]
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
