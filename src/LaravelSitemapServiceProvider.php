@@ -51,9 +51,14 @@ class LaravelSitemapServiceProvider extends PackageServiceProvider implements De
      */
     public function boot(): void
     {
-        $this->publishConfig();
-        $this->publishViews();
-        $this->publishTranslations();
+        $this->loadTranslations();
+        $this->loadViews();
+
+        if ($this->app->runningInConsole()) {
+            $this->publishConfig();
+            $this->publishTranslations();
+            $this->publishViews();
+        }
     }
 
     /**
