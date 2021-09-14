@@ -1,5 +1,5 @@
 {
-    "name": "arcanedev/laravel-sitemap",
+    "name": "scchethu/laravel-sitemap",
     "description": "A sitemap generator for Laravel.",
     "homepage": "https://github.com/ARCANEDEV/LaravelSitemap",
     "keywords": ["arcanedev", "laravel", "sitemap", "generator"],
